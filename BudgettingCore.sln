@@ -5,11 +5,15 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingCore", "BudgettingCore\BudgettingCore.csproj", "{75077C61-0BD5-49FA-A2CE-41D1FAEA7811}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgettingDomain", "BudgettingDomain\BudgettingDomain.csproj", "{8E77229A-FB5D-4D4F-A820-7A444601CF73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingDomain", "BudgettingDomain\BudgettingDomain.csproj", "{8E77229A-FB5D-4D4F-A820-7A444601CF73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgettingPersistence", "BudgettingPersistence\BudgettingPersistence.csproj", "{D35CEB21-B894-4439-B999-B850A34F7296}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingPersistence", "BudgettingPersistence\BudgettingPersistence.csproj", "{D35CEB21-B894-4439-B999-B850A34F7296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgettingInfrastructure", "BudgettingInfrastructure\BudgettingInfrastructure.csproj", "{8E7DA763-938F-45E1-B521-ADFE41FB3D0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingInfrastructure", "BudgettingInfrastructure\BudgettingInfrastructure.csproj", "{8E7DA763-938F-45E1-B521-ADFE41FB3D0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{8F6A4042-405A-4515-AE6E-C76405DFD422}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingClient", "BudgettingClient\BudgettingClient.csproj", "{AFF58A01-E7C3-4F85-AA0E-C0AA4D394C60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,17 @@ Global
 		{8E7DA763-938F-45E1-B521-ADFE41FB3D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E7DA763-938F-45E1-B521-ADFE41FB3D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E7DA763-938F-45E1-B521-ADFE41FB3D0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF58A01-E7C3-4F85-AA0E-C0AA4D394C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF58A01-E7C3-4F85-AA0E-C0AA4D394C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF58A01-E7C3-4F85-AA0E-C0AA4D394C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF58A01-E7C3-4F85-AA0E-C0AA4D394C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{75077C61-0BD5-49FA-A2CE-41D1FAEA7811} = {8F6A4042-405A-4515-AE6E-C76405DFD422}
+		{AFF58A01-E7C3-4F85-AA0E-C0AA4D394C60} = {8F6A4042-405A-4515-AE6E-C76405DFD422}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70D6E407-A261-4234-9CF3-7E6EADC20DBA}

@@ -2,12 +2,14 @@
 using BudgettingPersistence;
 using IdentityServer4;
 using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace BudgettingInfrastructure
 {
-    public class ConfigureServiceContainer
+    public class ServiceConfigurationContainer
     {
         public static void SetConnectionString(IConfiguration configuration)
         {
@@ -60,48 +62,64 @@ namespace BudgettingInfrastructure
         }
         public static void ConfigureServices(IServiceCollection services)
         {
+
             AddTransientServices(services);
             AddScopedServices(services);
 
-            AddIdentityService(services);
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<IdentityContext>()
+                    .AddDefaultTokenProviders();
+
+            IdentityResourceConfiguration.ConfigureIdentityServer(services);
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            }).AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", options => {
+                options.SignInScheme = "Cookies";
+                options.Authority = "https://localhost:6000";
+                options.RequireHttpsMetadata = true;
+
+                options.ClientId = "webclient";
+                options.ClientSecret = "secret";
+                options.ResponseType = "code id_token";
+
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+
+                options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
+                options.Scope.Add("api");
+                options.Scope.Add("read");
+                options.Scope.Add("write");
+                options.Scope.Add("delete");
+                options.Scope.Add("manage");
+
+            })
+                ;
         }
 
-        private static void AddIdentityService(IServiceCollection services)
+        public static void Configure(WebApplication app)
         {
-            services.AddIdentityServer();
-            services.AddAuthentication()
-                    .AddOpenIdConnect("demoidsrv", "IdentityServer", options =>
-                     {
-                         options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                         options.SignOutScheme = IdentityServerConstants.SignoutScheme;
 
-                         options.Authority = "https://demo.identityserver.io/";
-                         options.ClientId = "implicit";
-                         options.ResponseType = "id_token";
-                         options.SaveTokens = true;
-                         options.CallbackPath = new PathString("/signin-idsrv");
-                         options.SignedOutCallbackPath = new PathString("/signout-callback-idsrv");
-                         options.RemoteSignOutPath = new PathString("/signout-idsrv");
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-                         options.TokenValidationParameters = new TokenValidationParameters
-                         {
-                             NameClaimType = "name",
-                             RoleClaimType = "role"
-                         };
-                     });
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseIdentityServer();
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            //{
-            //    options.SignIn.RequireConfirmedAccount = false;
-            //}).AddEntityFrameworkStores<IdentityContext>()
-            //  .AddDefaultTokenProviders();
-            //services.AddInMemoryCaching()
-            //        .AddClientStore<InMemoryClientStore>()
-            //        .AddResourceStore<InMemoryResourcesStore>()
-            //        .AddDeveloperSigningCredential()
-            //        .AddAspNetIdentity<ApplicationUser>();
+            app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
+
+            app.MapControllers();
 
         }
+
         private static void AddScopedServices(IServiceCollection services)
         {
             services.AddScoped<IBudgettingContext>(provider => provider.GetService<BudgettingContext>());

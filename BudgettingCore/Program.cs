@@ -12,31 +12,24 @@ builder.Services.AddSwaggerGen();
 
 
 
-ConfigureServiceContainer.EnsureDbCreation();
-ConfigureServiceContainer.SetConnectionString(builder.Configuration);
-ConfigureServiceContainer.RegisterConnections(builder.Services, builder.Configuration);
-ConfigureServiceContainer.ConfigureServices(builder.Services);
+ServiceConfigurationContainer.EnsureDbCreation();
+ServiceConfigurationContainer.SetConnectionString(builder.Configuration);
+ServiceConfigurationContainer.RegisterConnections(builder.Services, builder.Configuration);
+ServiceConfigurationContainer.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-   
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+    
+
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+ServiceConfigurationContainer.Configure(app);
 
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseIdentityServer();
-
-app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapControllers();
 
 app.Run();
