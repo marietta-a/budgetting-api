@@ -1,11 +1,14 @@
 ﻿using BudgettingDomain.Entities;
 using BudgettingPersistence;
+using IdentityServer4;
 using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +69,27 @@ namespace BudgettingInfrastructure
         private static void AddIdentityService(IServiceCollection services)
         {
             services.AddIdentityServer();
-            services.AddAuthentication();
+            services.AddAuthentication()
+                    .AddOpenIdConnect("demoidsrv", "IdentityServer", options =>
+                     {
+                         options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                         options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+
+                         options.Authority = "https://demo.identityserver.io/";
+                         options.ClientId = "implicit";
+                         options.ResponseType = "id_token";
+                         options.SaveTokens = true;
+                         options.CallbackPath = new PathString("/signin-idsrv");
+                         options.SignedOutCallbackPath = new PathString("/signout-callback-idsrv");
+                         options.RemoteSignOutPath = new PathString("/signout-idsrv");
+
+                         options.TokenValidationParameters = new TokenValidationParameters
+                         {
+                             NameClaimType = "name",
+                             RoleClaimType = "role"
+                         };
+                     });
+
             //services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             //{
             //    options.SignIn.RequireConfirmedAccount = false;
