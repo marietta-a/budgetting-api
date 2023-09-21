@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgettingInfrastructure
+namespace IdentityServer
 {
     public class IdentityResourceConfiguration
     {
@@ -25,21 +25,21 @@ namespace BudgettingInfrastructure
 
         public static void ConfigureIdentityServer(IServiceCollection services)
         {
-            //var builder = services.AddIdentityServer(options =>
-            //{
-            //    options.Events.RaiseErrorEvents = true;
-            //    options.Events.RaiseInformationEvents = true;
-            //    options.Events.RaiseFailureEvents = true;
-            //    options.Events.RaiseSuccessEvents = true;
-            //});
-            //builder.AddInMemoryClients(ClientConfiguration.GetClients())
-            //        .AddInMemoryApiResources(GetApiResources())
-            //        .AddInMemoryApiScopes(GetApiScopes())
-            //        .AddInMemoryIdentityResources(GetIdentityResources())
-            //        .AddAspNetIdentity<IdentityUser>();
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            });
+            builder.AddInMemoryClients(ClientConfiguration.GetClients())
+                    .AddInMemoryApiResources(GetApiResources())
+                    .AddInMemoryApiScopes(GetApiScopes())
+                    .AddInMemoryIdentityResources(GetIdentityResources())
+                    .AddAspNetIdentity<IdentityUser>();
         }
 
-        private static IEnumerable<IdentityResource> GetIdentityResources()
+        public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
             {
@@ -52,17 +52,16 @@ namespace BudgettingInfrastructure
             };
         }
 
-        private static IEnumerable<ApiScope> GetApiScopes()
+        public static IEnumerable<ApiScope> GetApiScopes()
         {
             return new List<ApiScope>
             {
-                new ApiScope(name: "read",   displayName: "Read your data.", userClaims: new [] { "user_level" }),
-                new ApiScope(name: "write",  displayName: "Write your data.", userClaims: new [] { "user_level" }),
-                new ApiScope(name: "delete", displayName: "Delete your data.", userClaims: new [] { "user_level" })
+                new ApiScope("api", "My API"),
+                new ApiScope("api1", "My API"),
             };
         }
 
-        private static IEnumerable<ApiResource> GetApiResources()
+        public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
             {

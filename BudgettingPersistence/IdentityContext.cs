@@ -1,6 +1,5 @@
 ﻿using BudgettingDomain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BudgettingPersistence
 {
-    public class IdentityContext : IdentityDbContext<ApplicationUser, IdentityRole, string>, IIdentityContext
+    public class IdentityContext : DbContext, IIdentityContext
     {
         public IdentityContext()
         {

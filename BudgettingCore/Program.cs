@@ -22,14 +22,19 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
-    app.UseDeveloperExceptionPage();
-    
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    //app.UseDeveloperExceptionPage();
+
 
 }
 
 ServiceConfigurationContainer.Configure(app);
+
+
+app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
+
+app.MapControllers();
 
 
 app.Run();

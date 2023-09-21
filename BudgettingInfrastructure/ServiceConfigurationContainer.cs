@@ -10,9 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,60 +65,103 @@ namespace BudgettingInfrastructure
         public static void ConfigureServices(IServiceCollection services)
         {
 
+
+            services.AddControllers();
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5001";
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "api1");
+                });
+            });
+
             AddTransientServices(services);
             AddScopedServices(services);
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<IdentityContext>()
-                    .AddDefaultTokenProviders();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //        .AddEntityFrameworkStores<IdentityContext>()
+            //        .AddDefaultTokenProviders();
 
-            IdentityResourceConfiguration.ConfigureIdentityServer(services);
+            //IdentityResourceConfiguration.ConfigureIdentityServer(services);
 
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            }).AddCookie("Cookies")
-            .AddOpenIdConnect("oidc", options => {
-                options.SignInScheme = "Cookies";
-                options.Authority = "https://localhost:6000";
-                options.RequireHttpsMetadata = true;
+            //IdentityModelEventSource.ShowPII = true;
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = "Cookies";
+            //    options.DefaultChallengeScheme = "oidc";
+            //}).AddCookie("Cookies")
+            //.AddOpenIdConnect("oidc", options =>
+            //{
+            //    options.SignInScheme = "Cookies";
+            //    options.Authority = "https://localhost:5001";
+            //    options.RequireHttpsMetadata = true;
 
-                options.ClientId = "webclient";
-                options.ClientSecret = "secret";
-                options.ResponseType = "code id_token";
+            //    options.ClientId = "mvc";
+            //    //options.ClientId = "webclient";
+            //    options.ClientSecret = "secret";
+            //    options.ResponseType = "code";
 
-                options.SaveTokens = true;
-                options.GetClaimsFromUserInfoEndpoint = true;
+            //    options.SaveTokens = true;
+            //    options.GetClaimsFromUserInfoEndpoint = true;
 
-                options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
-                options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
-                options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
-                options.Scope.Add("api");
-                options.Scope.Add("read");
-                options.Scope.Add("write");
-                options.Scope.Add("delete");
-                options.Scope.Add("manage");
+            //    options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+            //    options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+            //    options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
+            //    options.Scope.Add("api");
+            //    options.Scope.Add("read");
+            //    options.Scope.Add("write");
+            //    options.Scope.Add("delete");
+            //    options.Scope.Add("manage");
 
-            })
-                ;
+            //});
+
+
         }
 
-        public static void Configure(WebApplication app)
+        public static void Configure(IApplicationBuilder app)
         {
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+
+            //app.UseRouting();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
+            ////app.UseIdentityServer();
+
+            ////app.UseEndpoints(endpoints =>
+            ////{
+            ////    endpoints.MapDefaultControllerRoute()
+            ////        .RequireAuthorization();
+            ////});
+            //app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
+
+            //app.MapControllers();
+
 
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseIdentityServer();
 
-            app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
-
-            app.MapControllers();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers()
+                    .RequireAuthorization("ApiScope");
+            });
 
         }
 

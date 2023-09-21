@@ -8,13 +8,29 @@ using System.Threading.Tasks;
 
 namespace IdentityServer
 {
-    public class ClientConfiguration
+    public static class ClientConfiguration
     {
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client>
             {
-               ClientWithClientCredentialGrantType,
+                new Client
+                {
+                    ClientId = "client",
+
+                    // no interactive user, use the clientid/secret for authentication
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scopes that client has access to
+                    AllowedScopes = { "api1" }
+                },
+               //ClientWithClientCredentialGrantType,
                //InteractiveClient
             };
         }
@@ -27,7 +43,8 @@ namespace IdentityServer
                 {
                     ClientId = "mvc",
                     //ClientId = "service.client",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    ClientSecrets = { new Secret("secret"), new Secret("secret".Sha256()) },
+
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = { "api", "api1", "api2.read_only" }
@@ -46,7 +63,7 @@ namespace IdentityServer
 
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowOfflineAccess = true,
-                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    ClientSecrets = { new Secret("secret"), new Secret("secret".Sha256()) },
 
                     RedirectUris = { "http://localhost:21402/signin-oidc" },
                     PostLogoutRedirectUris = { "http://localhost:21402/" },

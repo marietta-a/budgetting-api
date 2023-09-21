@@ -6,7 +6,8 @@ using System.Xml.Linq;
 namespace BudgettingCore.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("[controller]")]
+    [Authorize]
     public class IdentityController : ControllerBase
     {
         private ILogger<IdentityController> _logger;
@@ -16,16 +17,11 @@ namespace BudgettingCore.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetUserClaim")]
-        public ApplicationUser Get()
+        [HttpGet]
+        public IActionResult Get()
         {
-            var transaction = new ApplicationUser
-            {
-                LastName = "A",
-                FirstName = "Doe",
-            };
-            return transaction;
-            //return new JsonResult(from c in User.Claims select  new {c.Type, c.Value});
+            var result = new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+            return result;
         }
     }
 }
