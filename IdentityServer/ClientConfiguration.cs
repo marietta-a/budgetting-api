@@ -14,24 +14,8 @@ namespace IdentityServer
         {
             return new List<Client>
             {
-                new Client
-                {
-                    ClientId = "client",
-
-                    // no interactive user, use the clientid/secret for authentication
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-                    // secret for authentication
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-
-                    // scopes that client has access to
-                    AllowedScopes = { "api1" }
-                },
-               //ClientWithClientCredentialGrantType,
-               //InteractiveClient
+                ClientWithClientCredentialGrantType,
+                InteractiveClient
             };
         }
 
@@ -41,13 +25,12 @@ namespace IdentityServer
             {
                 return new Client
                 {
-                    ClientId = "mvc",
-                    //ClientId = "service.client",
-                    ClientSecrets = { new Secret("secret"), new Secret("secret".Sha256()) },
-
+                    ClientId = "client",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", "api1", "api2.read_only" }
+                    // scopes that client has access to
+                    AllowedScopes = { "api1" }
                 };
             }
         }
@@ -58,31 +41,22 @@ namespace IdentityServer
             {
                 return new Client
                 {
-                    //ClientId = "webclient",
                     ClientId = "mvc",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    AllowOfflineAccess = true,
-                    ClientSecrets = { new Secret("secret"), new Secret("secret".Sha256()) },
 
-                    RedirectUris = { "http://localhost:21402/signin-oidc" },
-                    PostLogoutRedirectUris = { "http://localhost:21402/" },
-                    FrontChannelLogoutUri = "http://localhost:21402/signout-oidc",
+                    // where to redirect to after login
+                    RedirectUris = { "https://localhost:5002/signin-oidc" },
 
-                    //RedirectUris = { "http://localhost:4200/#/login" },
-                    //PostLogoutRedirectUris = { "http://localhost:4200/#/login" },
-                    //FrontChannelLogoutUri = "http://localhost:4200/#/register",
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
 
-                    AllowedScopes =
+                    AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
-
-                        "api",
-                        "api1",
-                        "api2.read_only"
-                    },
+                        IdentityServerConstants.StandardScopes.Profile
+                    }
                 };
             }
         }

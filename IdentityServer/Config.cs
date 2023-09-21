@@ -9,11 +9,7 @@ namespace IdentityServer
 {
     public static class Config
     {
-        public static IEnumerable<IdentityResource> IdentityResources =>
-            new IdentityResource[]
-            { 
-                new IdentityResources.OpenId()
-            };
+        public static IEnumerable<IdentityResource> IdentityResources => IdentityResourceConfiguration.GetIdentityResources();
 
         public static IEnumerable<ApiScope> ApiScopes => IdentityResourceConfiguration.GetApiScopes();
         public static IEnumerable<Client> Clients => ClientConfiguration.GetClients();

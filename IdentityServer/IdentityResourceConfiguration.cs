@@ -44,11 +44,7 @@ namespace IdentityServer
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResource(
-                    name: "profile",
-                    userClaims: new[] { "name", "email", "website" },
-                    displayName: "Your profile data"
-                    )
+                new IdentityResources.Profile(),
             };
         }
 
