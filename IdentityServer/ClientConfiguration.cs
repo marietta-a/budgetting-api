@@ -50,10 +50,11 @@ namespace IdentityServer
                     AllowedGrantTypes = GrantTypes.Code,
 
                     // where to redirect to after login
-                    RedirectUris = { "http://localhost:4200/#/signin-oidc" },
+                    //RedirectUris = { "http://localhost:4200/#/signin-oidc" },
+                    RedirectUris = { "http://localhost:4200/#/dashboard" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:4200/#/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:4200/#/dashboard" },
 
                     AllowedScopes = new List<string>
                     {
@@ -61,6 +62,7 @@ namespace IdentityServer
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "api1",
                         "api"
                     }
                 };
