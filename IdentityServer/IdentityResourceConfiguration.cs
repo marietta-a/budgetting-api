@@ -36,7 +36,7 @@ namespace IdentityServer
                     .AddInMemoryApiResources(GetApiResources())
                     .AddInMemoryApiScopes(GetApiScopes())
                     .AddInMemoryIdentityResources(GetIdentityResources());
-                    //.AddAspNetIdentity<IdentityUser>();
+                    .AddAspNetIdentity<IdentityUser>();
         }
 
         public static IEnumerable<IdentityResource> GetIdentityResources()
