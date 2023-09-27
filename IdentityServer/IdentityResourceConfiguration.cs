@@ -25,6 +25,7 @@ namespace IdentityServer
 
         public static void ConfigureIdentityServer(IServiceCollection services)
         {
+            services.AddIdentity<IdentityUser, IdentityRole>();
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -36,7 +37,7 @@ namespace IdentityServer
                     .AddInMemoryApiResources(GetApiResources())
                     .AddInMemoryApiScopes(GetApiScopes())
                     .AddInMemoryIdentityResources(GetIdentityResources());
-                    .AddAspNetIdentity<IdentityUser>();
+                    //.AddAspNetIdentity<IdentityUser>();
         }
 
         public static IEnumerable<IdentityResource> GetIdentityResources()

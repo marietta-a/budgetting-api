@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using IdentityServer4.EntityFramework.Storage;
 using Serilog;
+using System.Linq.Expressions;
+using System;
 
 namespace IdentityServer
 {
@@ -40,47 +42,56 @@ namespace IdentityServer
 
         private static void EnsureSeedData(ConfigurationDbContext context)
         {
-            if (!context.Clients.Any())
+            try
             {
-                Log.Debug("Clients being populated");
-                foreach (var client in Config.Clients.ToList())
+                if (!context.Clients.Any())
                 {
-                    context.Clients.Add(client.ToEntity());
+                    Log.Debug("Clients being populated");
+                    foreach (var client in Config.Clients.ToList())
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
-            }
-            else
-            {
-                Log.Debug("Clients already populated");
-            }
+                else
+                {
+                    Log.Debug("Clients already populated");
+                }
 
-            if (!context.IdentityResources.Any())
-            {
-                Log.Debug("IdentityResources being populated");
-                foreach (var resource in Config.IdentityResources.ToList())
+                if (!context.IdentityResources.Any())
                 {
-                    context.IdentityResources.Add(resource.ToEntity());
+                    Log.Debug("IdentityResources being populated");
+                    foreach (var resource in Config.IdentityResources.ToList())
+                    {
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
-            }
-            else
-            {
-                Log.Debug("IdentityResources already populated");
-            }
+                else
+                {
+                    Log.Debug("IdentityResources already populated");
+                }
 
-            if (!context.ApiResources.Any())
-            {
-                Log.Debug("ApiScopes being populated");
-                foreach (var resource in Config.ApiScopes.ToList())
+
+                if (!context.ApiScopes.Any())
                 {
-                    context.ApiScopes.Add(resource.ToEntity());
+                    Log.Debug("ApiScopes being populated");
+                    foreach (var resource in Config.ApiScopes.ToList())
+                    {
+                        context.ApiScopes.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
+                else
+                {
+                    Log.Debug("ApiScopes already populated");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                Log.Debug("ApiScopes already populated");
+                var msg = ex.Message;
             }
         }
+        
     }
 }

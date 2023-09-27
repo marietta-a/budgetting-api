@@ -82,6 +82,9 @@ namespace IdentityServer
                     policy.WithOrigins("http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
+                    policy.WithOrigins("http://localhost:4200/#/login")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
         }
@@ -124,6 +127,7 @@ namespace IdentityServer
 
         public void Configure(IApplicationBuilder app)
         {
+            InitializeDatabase(app);
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
