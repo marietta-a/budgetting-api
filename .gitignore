@@ -478,3 +478,6 @@ $RECYCLE.BIN/
 
 #Keys
 *.jwk
+
+#databases
+*.db

@@ -43,7 +43,7 @@ namespace IdentityServer
             {
                 return new Client
                 {
-                    ClientId = "spa",
+                    ClientId = "interactive",
                     //ClientId = "mvc",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 

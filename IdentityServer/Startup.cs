@@ -82,9 +82,6 @@ namespace IdentityServer
                     policy.WithOrigins("http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
-                    policy.WithOrigins("http://localhost:4200/#/login")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
                 });
             });
         }
@@ -135,6 +132,7 @@ namespace IdentityServer
             }
 
             app.UseStaticFiles();
+            app.UseCors("default");
 
             app.UseRouting();
             app.UseIdentityServer();
