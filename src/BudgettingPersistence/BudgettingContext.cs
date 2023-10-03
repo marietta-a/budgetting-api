@@ -23,6 +23,7 @@ namespace BudgettingPersistence
 
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionType> TransactionTypes { get; set; }
+        public DbSet<Staff> Staff { get;set ; }
 
         public async Task<int> SaveChangesAsync()
         {
