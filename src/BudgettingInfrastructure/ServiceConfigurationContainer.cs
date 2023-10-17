@@ -2,6 +2,7 @@
 using BudgettingPersistence;
 using IdentityServer4;
 using IdentityServer4.Stores;
+using Implementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -174,6 +176,8 @@ namespace BudgettingInfrastructure
 
         private static void AddTransientServices(IServiceCollection services)
         {
+            services.AddTransient<IServiceBase>(provider => provider.GetService<ServiceBase<object>>());
+            services.AddTransient<IStaffService>(provider => provider.GetService<StaffService>());
         }
     }
 }

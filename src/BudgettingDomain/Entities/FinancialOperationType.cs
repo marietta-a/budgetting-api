@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BudgettingDomain.Entities
 {
-    public class TransactionType : BaseEntity
+    public class FinancialOperationType : BaseEntity
     {
         [StringLength(25)]
         public string Type { get; set; }

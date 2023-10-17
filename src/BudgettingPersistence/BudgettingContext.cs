@@ -21,8 +21,8 @@ namespace BudgettingPersistence
         }
         public static string ConnectionString { get; set; }
 
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionType> TransactionTypes { get; set; }
+        public DbSet<FinancialOperation> FinancialOperations { get; set; }
+        public DbSet<FinancialOperationType> FinancialOperationTypes { get; set; }
         public DbSet<Staff> Staff { get;set ; }
 
         public async Task<int> SaveChangesAsync()

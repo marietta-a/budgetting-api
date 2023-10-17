@@ -1,5 +1,7 @@
 ﻿using BudgettingDomain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +10,12 @@ using System.Threading.Tasks;
 
 namespace BudgettingPersistence
 {
-    public interface IBudgettingContext
+    public interface IBudgettingContext : IDisposable
     {
-        DbSet<Transaction> Transactions { get; set; }
-        DbSet<TransactionType> TransactionTypes { get; set; }
+        DbSet<T> Set<T>() where T : class;
+        DatabaseFacade Database { get; }
+        DbSet<FinancialOperation> FinancialOperations { get; set; }
+        DbSet<FinancialOperationType> FinancialOperationTypes { get; set; }
         DbSet<Staff> Staff { get; set; }
         Task<int> SaveChangesAsync();
     }

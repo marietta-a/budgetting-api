@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public interface IServiceBase<T> where T : class
+    public interface IServiceBase
     {
-        T GetItem(string key);
-        T AddItem(T item);
-        T EditItem(T item);
+
+    }
+    public interface IServiceBase<T> : IServiceBase where T : class
+    {
+        Task<T> GetItem(T item);
+        Task<T> AddOrUpdateItem(T item);
     }
 }

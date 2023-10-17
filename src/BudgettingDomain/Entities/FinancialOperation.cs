@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace BudgettingDomain.Entities
 {
-    public class Transaction : BaseEntity
+    public class FinancialOperation : BaseEntity
     {
         [StringLength(4)]
         [Required]
-        public string TransactionTypeId { get; set; }
+        public string OperationTypeId { get; set; }
         [StringLength(200)]
         public string Description { get; set; }
         public double Amount { get; set; }
