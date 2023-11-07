@@ -1,4 +1,4 @@
-﻿using BudgettingDomain.Entities;
+﻿using Budgetting.Domain.Models;
 using BudgettingPersistence;
 using Services;
 using System;

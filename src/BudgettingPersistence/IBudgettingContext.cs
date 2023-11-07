@@ -1,4 +1,4 @@
-﻿using BudgettingDomain.Entities;
+﻿using Budgetting.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;

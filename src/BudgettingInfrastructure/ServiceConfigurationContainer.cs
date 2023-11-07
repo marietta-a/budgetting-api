@@ -1,5 +1,4 @@
-﻿using BudgettingDomain.Entities;
-using BudgettingPersistence;
+﻿using BudgettingPersistence;
 using IdentityServer4;
 using IdentityServer4.Stores;
 using Implementations;

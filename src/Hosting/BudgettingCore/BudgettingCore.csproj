@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BudgettingInfrastructure\BudgettingInfrastructure.csproj" />
+    <ProjectReference Include="..\..\BudgettingInfrastructure\Budgetting.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

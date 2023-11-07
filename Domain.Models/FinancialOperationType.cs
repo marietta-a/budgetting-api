@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgettingDomain.Entities
+namespace Budgetting.Domain.Models
 {
     public class FinancialOperationType : BaseEntity
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgettingDomain
+namespace Budgetting.Domain.Models
 {
     public class BaseEntity
     {

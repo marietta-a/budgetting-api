@@ -13,22 +13,24 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingCore", "src\Hosti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "src\Hosting\IdentityServer\IdentityServer.csproj", "{596D60EE-143A-4238-82B0-340B43A45D08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingDomain", "src\BudgettingDomain\BudgettingDomain.csproj", "{32BE62F5-8A31-4E7A-A724-5D511D3C7C49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Budgetting.Domain", "src\BudgettingDomain\Budgetting.Domain.csproj", "{32BE62F5-8A31-4E7A-A724-5D511D3C7C49}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingInfrastructure", "src\BudgettingInfrastructure\BudgettingInfrastructure.csproj", "{AB0D3D61-A015-465F-A0E8-A79578B43D56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Budgetting.Infrastructure", "src\BudgettingInfrastructure\Budgetting.Infrastructure.csproj", "{AB0D3D61-A015-465F-A0E8-A79578B43D56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgettingPersistence", "src\BudgettingPersistence\BudgettingPersistence.csproj", "{4F5CEE26-B63E-4DA2-934E-E495CD5E4B28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Budgetting.Persistence", "src\BudgettingPersistence\Budgetting.Persistence.csproj", "{4F5CEE26-B63E-4DA2-934E-E495CD5E4B28}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "src\Client\Client.csproj", "{93ADB87C-4552-4CAF-A0AB-502448AE0BAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{69FDE238-2EC1-453A-BAC2-113D32CF29EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Budgetting.Services", "Services\Budgetting.Services.csproj", "{69FDE238-2EC1-453A-BAC2-113D32CF29EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Implementations", "Implementations\Implementations.csproj", "{94B1CECD-2F50-416B-93B0-26D038DE263A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Budgetting.Repository", "Implementations\Budgetting.Repository.csproj", "{94B1CECD-2F50-416B-93B0-26D038DE263A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7EE25D0F-500F-4F8E-8E50-6E4D7C2FAD27}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budgetting.Domain.Models", "Domain.Models\Budgetting.Domain.Models.csproj", "{F7FC7B16-7C0B-44D0-86D2-E6CFD8AE1B68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +74,10 @@ Global
 		{94B1CECD-2F50-416B-93B0-26D038DE263A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94B1CECD-2F50-416B-93B0-26D038DE263A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94B1CECD-2F50-416B-93B0-26D038DE263A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7FC7B16-7C0B-44D0-86D2-E6CFD8AE1B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7FC7B16-7C0B-44D0-86D2-E6CFD8AE1B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7FC7B16-7C0B-44D0-86D2-E6CFD8AE1B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7FC7B16-7C0B-44D0-86D2-E6CFD8AE1B68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{93ADB87C-4552-4CAF-A0AB-502448AE0BAB} = {6B63BC31-398E-451B-AAF9-693ECAADF404}
 		{69FDE238-2EC1-453A-BAC2-113D32CF29EB} = {6B63BC31-398E-451B-AAF9-693ECAADF404}
 		{94B1CECD-2F50-416B-93B0-26D038DE263A} = {6B63BC31-398E-451B-AAF9-693ECAADF404}
+		{F7FC7B16-7C0B-44D0-86D2-E6CFD8AE1B68} = {6B63BC31-398E-451B-AAF9-693ECAADF404}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70D6E407-A261-4234-9CF3-7E6EADC20DBA}
