@@ -23,7 +23,7 @@ namespace BudgettingPersistence
 
         public DbSet<FinancialOperation> FinancialOperations { get; set; }
         public DbSet<FinancialOperationType> FinancialOperationTypes { get; set; }
-        public DbSet<Staff> Staff { get;set ; }
+        public DbSet<ApplicationUser> ApplicationUsers { get;set ; }
 
         public async Task<int> SaveChangesAsync()
         {

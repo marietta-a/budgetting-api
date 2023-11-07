@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public interface IStaffService : IServiceBase<Staff>
+    public interface IApplicationUserService : IServiceBase<ApplicationUser>
     {
     }
 }

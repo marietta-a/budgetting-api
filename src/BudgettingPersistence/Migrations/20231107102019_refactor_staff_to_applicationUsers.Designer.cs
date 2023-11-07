@@ -3,6 +3,7 @@ using System;
 using BudgettingPersistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgettingPersistence.Migrations
 {
     [DbContext(typeof(BudgettingContext))]
-    partial class BudgettingContextModelSnapshot : ModelSnapshot
+    [Migration("20231107102019_refactor_staff_to_applicationUsers")]
+    partial class refactor_staff_to_applicationUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");

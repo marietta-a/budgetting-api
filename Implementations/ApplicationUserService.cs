@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Implementations
 {
-    public class StaffService: ServiceBase<Staff>, IStaffService
+    public class ApplicationUserService : ServiceBase<ApplicationUser>, IApplicationUserService
     {
-        public StaffService(BudgettingContext _ctx) : base(_ctx)
+        public ApplicationUserService(IBudgettingContext _ctx) : base(_ctx)
         {
         }
     }

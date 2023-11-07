@@ -16,7 +16,7 @@ namespace BudgettingPersistence
         DatabaseFacade Database { get; }
         DbSet<FinancialOperation> FinancialOperations { get; set; }
         DbSet<FinancialOperationType> FinancialOperationTypes { get; set; }
-        DbSet<Staff> Staff { get; set; }
+        DbSet<ApplicationUser> ApplicationUsers { get; set; }
         Task<int> SaveChangesAsync();
     }
 }

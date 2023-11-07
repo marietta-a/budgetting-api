@@ -177,7 +177,7 @@ namespace BudgettingInfrastructure
         private static void AddTransientServices(IServiceCollection services)
         {
             services.AddTransient<IServiceBase>(provider => provider.GetService<ServiceBase<object>>());
-            services.AddTransient<IStaffService>(provider => provider.GetService<StaffService>());
+            services.AddTransient<IApplicationUserService>(provider => provider.GetService<ApplicationUserService>());
         }
     }
 }
