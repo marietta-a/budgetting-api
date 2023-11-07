@@ -1,4 +1,5 @@
-﻿using Services;
+﻿using Budgetting.Domain.Models;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,23 @@ namespace BudgettingDomain.Commands.ApplicationUserCommands
             this.service = service;
         }
 
-        public ValueTask Handle(CreateApplicationUser command, CancellationToken cancellationToken)
+        public async ValueTask Handle(CreateApplicationUser command, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = command.UserName,
+                    Email = command.Email,
+
+                };
+
+               await service.AddOrUpdateItem(user);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
