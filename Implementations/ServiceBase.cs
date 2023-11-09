@@ -56,5 +56,18 @@ namespace Implementations
                 }
             }
         }
+
+        public async Task<IQueryable<T>> GetItems()
+        {
+            try
+            {
+                return Context.Set<T>();
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                throw;
+            }
+        }
     }
 }

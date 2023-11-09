@@ -88,6 +88,7 @@ namespace BudgettingInfrastructure
                 });
             });
 
+
             AddTransientServices(services);
             AddScopedServices(services);
 
@@ -131,6 +132,7 @@ namespace BudgettingInfrastructure
 
 
         }
+
 
         public static void Configure(IApplicationBuilder app)
         {

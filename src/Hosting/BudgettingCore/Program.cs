@@ -1,5 +1,7 @@
 
 using BudgettingInfrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
 ServiceConfigurationContainer.EnsureDbCreation();
 ServiceConfigurationContainer.SetConnectionString(builder.Configuration);
@@ -32,7 +34,8 @@ if (app.Environment.IsDevelopment())
 ServiceConfigurationContainer.Configure(app);
 
 
-app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
+app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action}");
+//app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
 
 app.MapControllers();
 

@@ -14,5 +14,6 @@ namespace Services
     {
         Task<T> GetItem(T item);
         Task<T> AddOrUpdateItem(T item);
+        Task<IQueryable<T>> GetItems();
     }
 }
