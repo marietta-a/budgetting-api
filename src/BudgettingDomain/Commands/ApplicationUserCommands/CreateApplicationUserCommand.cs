@@ -18,5 +18,9 @@ namespace BudgettingDomain.Commands.ApplicationUserCommands
             this.Email = Email;
             this.UserName = UserName;
         }
+
+        public CreateApplicationUserCommand()
+        {
+        }
     }
 }

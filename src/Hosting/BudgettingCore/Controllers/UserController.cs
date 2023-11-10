@@ -21,17 +21,31 @@ namespace BudgettingCore.Controllers
         [HttpPost(Name = "CreateUser")]
         public async Task<IActionResult> CreateUser(CreateApplicationUserCommand command)
         {
-            var record = mediator.Send(command);
-            return Ok(record);
+            try
+            {
+                var record = mediator.Send(command);
+                return Ok(record);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         [HttpGet(Name = "GetUsers")]
         public async Task<IActionResult> GetALlUsers()
         {
-            var query = new GetAllApplicationUsersQuery();
-            var users = mediator.Send(query);
+            try
+            {
+                var query = new GetAllApplicationUsersQuery();
+                var users = mediator.Send(query);
 
-            return Ok(users);
+                return Ok(users);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         

@@ -3,17 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BudgettingPersistence.Migrations
+namespace Budgetting.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class refactor_staff_to_applicationUsers : Migration
+    public partial class initial_create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Staff");
-
             migrationBuilder.CreateTable(
                 name: "ApplicationUsers",
                 columns: table => new
@@ -41,6 +38,35 @@ namespace BudgettingPersistence.Migrations
                 {
                     table.PrimaryKey("PK_ApplicationUsers", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "FinancialOperations",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    OperationTypeId = table.Column<string>(type: "TEXT", maxLength: 4, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialOperations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FinancialOperationTypes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Type = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
+                    Operation = table.Column<int>(type: "INTEGER", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialOperationTypes", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -49,35 +75,11 @@ namespace BudgettingPersistence.Migrations
             migrationBuilder.DropTable(
                 name: "ApplicationUsers");
 
-            migrationBuilder.CreateTable(
-                name: "Staff",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    Address = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    NormalizedEmail = table.Column<string>(type: "TEXT", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "TEXT", nullable: true),
-                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Staff", x => x.Id);
-                });
+            migrationBuilder.DropTable(
+                name: "FinancialOperations");
+
+            migrationBuilder.DropTable(
+                name: "FinancialOperationTypes");
         }
     }
 }

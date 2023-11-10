@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BudgettingPersistence.Migrations
+namespace Budgetting.Persistence.Migrations
 {
     [DbContext(typeof(BudgettingContext))]
     partial class BudgettingContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace BudgettingPersistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
-            modelBuilder.Entity("BudgettingDomain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Budgetting.Domain.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -80,7 +80,7 @@ namespace BudgettingPersistence.Migrations
                     b.ToTable("ApplicationUsers");
                 });
 
-            modelBuilder.Entity("BudgettingDomain.Entities.FinancialOperation", b =>
+            modelBuilder.Entity("Budgetting.Domain.Models.FinancialOperation", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(100)
@@ -107,7 +107,7 @@ namespace BudgettingPersistence.Migrations
                     b.ToTable("FinancialOperations");
                 });
 
-            modelBuilder.Entity("BudgettingDomain.Entities.FinancialOperationType", b =>
+            modelBuilder.Entity("Budgetting.Domain.Models.FinancialOperationType", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(100)

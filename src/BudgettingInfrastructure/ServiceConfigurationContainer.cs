@@ -1,7 +1,11 @@
-﻿using BudgettingPersistence;
+﻿using Budgetting.Domain.Queries.ApplicationUserQueries;
+using BudgettingDomain.Commands.ApplicationUserCommands;
+using BudgettingPersistence;
 using IdentityServer4;
 using IdentityServer4.Stores;
 using Implementations;
+using MediatR;
+using MediatR.Wrappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -88,7 +93,7 @@ namespace BudgettingInfrastructure
                 });
             });
 
-
+            AddMediatRServices(services);
             AddTransientServices(services);
             AddScopedServices(services);
 
@@ -133,6 +138,21 @@ namespace BudgettingInfrastructure
 
         }
 
+        private static void AddMediatRServices(IServiceCollection services)
+        {
+            var commandAssemblies = new[]
+            {
+                typeof(CreateApplicationUserCommand).Assembly,
+                typeof(CreateApplicationUserCommandHandler).Assembly,
+            };
+            var queryAssemblies = new[]
+            {
+                typeof(GetAllApplicationUsersQuery).Assembly,
+                typeof(GetAllApplicationUsersQueryHandler).Assembly,
+            };
+            services.AddMediatR(c => c.RegisterServicesFromAssemblies(commandAssemblies));
+            services.AddMediatR(c => c.RegisterServicesFromAssemblies(queryAssemblies));
+        }
 
         public static void Configure(IApplicationBuilder app)
         {
@@ -157,14 +177,14 @@ namespace BudgettingInfrastructure
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers()
-                    .RequireAuthorization("ApiScope");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers()
+            //        .RequireAuthorization("ApiScope");
+            //});
 
         }
 
@@ -177,8 +197,7 @@ namespace BudgettingInfrastructure
 
         private static void AddTransientServices(IServiceCollection services)
         {
-            services.AddTransient<IServiceBase>(provider => provider.GetService<ServiceBase<object>>());
-            services.AddTransient<IApplicationUserService>(provider => provider.GetService<ApplicationUserService>());
+            services.AddTransient<IApplicationUserService, ApplicationUserService>();
         }
     }
 }

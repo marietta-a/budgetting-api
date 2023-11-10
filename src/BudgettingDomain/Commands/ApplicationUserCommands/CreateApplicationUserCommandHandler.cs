@@ -19,25 +19,16 @@ namespace BudgettingDomain.Commands.ApplicationUserCommands
             this.service = service;
         }
 
-        public async ValueTask Handle(CreateApplicationUserCommand command, CancellationToken cancellationToken)
-        {
-            try
-            {
-                var user = command.Map<CreateApplicationUserCommand, ApplicationUser>();
-
-                await service.AddOrUpdateItem(user);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         async Task<ApplicationUser> IRequestHandler<CreateApplicationUserCommand, ApplicationUser>.Handle(CreateApplicationUserCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var user = request.Map<CreateApplicationUserCommand, ApplicationUser>();
+                var user = new ApplicationUser
+                {
+                    UserName = request.UserName,
+                    Email = request.Email,
+
+                };
 
                 var result = await service.AddOrUpdateItem(user);
 

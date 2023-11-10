@@ -18,26 +18,15 @@ namespace Implementations
             Context = _ctx;
         }
 
-        public async Task<T> GetItem(T item)
-        {
-            try
-            {
-                return await Context.Set<T>().FindAsync(item);
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                throw;
-            }
-        }
+        public abstract Task<T> GetItem(T item);
 
-        public async Task<T> AddOrUpdateItem(T item)
+        public virtual async Task<T> AddOrUpdateItem(T item)
         {
             using (var trans = Context.Database.BeginTransaction())
             {
                 try
                 {
-                    var existing = GetItem(item);
+                    var existing = await GetItem(item);
                     if (existing != null)
                     {
                         Context.Set<T>().Update(item);
@@ -57,7 +46,7 @@ namespace Implementations
             }
         }
 
-        public async Task<IQueryable<T>> GetItems()
+        public virtual async Task<IQueryable<T>> GetItems()
         {
             try
             {

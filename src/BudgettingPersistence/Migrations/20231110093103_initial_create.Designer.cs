@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BudgettingPersistence.Migrations
+namespace Budgetting.Persistence.Migrations
 {
     [DbContext(typeof(BudgettingContext))]
-    [Migration("20231107100055_update_staff_table")]
-    partial class update_staff_table
+    [Migration("20231110093103_initial_create")]
+    partial class initial_create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,67 +20,13 @@ namespace BudgettingPersistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
-            modelBuilder.Entity("BudgettingDomain.Entities.FinancialOperation", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("OperationTypeId")
-                        .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FinancialOperations");
-                });
-
-            modelBuilder.Entity("BudgettingDomain.Entities.FinancialOperationType", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Operation")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FinancialOperationTypes");
-                });
-
-            modelBuilder.Entity("BudgettingDomain.Entities.Staff", b =>
+            modelBuilder.Entity("Budgetting.Domain.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("TEXT");
@@ -106,11 +52,6 @@ namespace BudgettingPersistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
@@ -139,7 +80,56 @@ namespace BudgettingPersistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Staff");
+                    b.ToTable("ApplicationUsers");
+                });
+
+            modelBuilder.Entity("Budgetting.Domain.Models.FinancialOperation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OperationTypeId")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FinancialOperations");
+                });
+
+            modelBuilder.Entity("Budgetting.Domain.Models.FinancialOperationType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Operation")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FinancialOperationTypes");
                 });
 #pragma warning restore 612, 618
         }
