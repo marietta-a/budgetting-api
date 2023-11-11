@@ -12,12 +12,19 @@ namespace BudgettingPersistence
 {
     public class BudgettingContext : DbContext, IBudgettingContext
     {
-        
+
+        public static string DbPath { get; set; }
         public BudgettingContext()
         {
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            DbPath = Path.Join(path, "Budgetting.db");
         }
         public BudgettingContext(DbContextOptions<BudgettingContext> options) : base(options)
         {
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            DbPath = Path.Join(path, "Budgetting.db");
         }
         public static string ConnectionString { get; set; }
 
@@ -29,22 +36,6 @@ namespace BudgettingPersistence
         {
             return await base.SaveChangesAsync();
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-
-            if (!optionsBuilder.IsConfigured)
-            {
-                var connectionStringBuilder = new SqliteConnectionStringBuilder(ConnectionString)
-                {
-                    DataSource = $"{path}\\Budgetting.db"
-                };
-                var connectionString = connectionStringBuilder.ToString();
-                var connection = new SqliteConnection(connectionString);
-
-                optionsBuilder.UseSqlite(connection);
-            }
-        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlite($"Data Source={DbPath}");
     }
 }

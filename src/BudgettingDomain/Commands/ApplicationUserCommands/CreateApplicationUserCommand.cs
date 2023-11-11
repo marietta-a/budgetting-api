@@ -13,14 +13,19 @@ namespace BudgettingDomain.Commands.ApplicationUserCommands
     {
         public string UserName { get; set; }
         public string Email { get; set; }
-        public CreateApplicationUserCommand(string UserName, string Email)
-        { 
-            this.Email = Email;
-            this.UserName = UserName;
-        }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         public CreateApplicationUserCommand()
         {
+        }
+
+        public CreateApplicationUserCommand(string userName, string email, string firstName, string lastName)
+        {
+            UserName = userName;
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Implementations
 {
     public abstract class ServiceBase<T> : IServiceBase<T> where T : class
     {
-        public IBudgettingContext Context { get; set; }
+        protected IBudgettingContext Context { get; set; }
         public ServiceBase(IBudgettingContext _ctx) 
         { 
             Context = _ctx;
@@ -36,6 +36,7 @@ namespace Implementations
                        await Context.Set<T>().AddAsync(item);
                     }
                     await Context.SaveChangesAsync();
+                    await trans.CommitAsync();
                     return item;
                 }
                 catch(Exception ex)

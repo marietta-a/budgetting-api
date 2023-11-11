@@ -2,6 +2,7 @@
 using BudgettingDomain.Commands.ApplicationUserCommands;
 using BudgettingPersistence;
 using IdentityServer4;
+using IdentityServer4.EntityFramework.Storage;
 using IdentityServer4.Stores;
 using Implementations;
 using MediatR;
@@ -32,7 +33,7 @@ namespace BudgettingInfrastructure
         public static void SetConnectionString(IConfiguration configuration)
         {
             BudgettingContext.ConnectionString = configuration.GetConnectionString("BudgettingConn"); ;
-            IdentityContext.ConnectionString = configuration.GetConnectionString("IdentityConnection"); ;
+            //IdentityContext.ConnectionString = configuration.GetConnectionString("IdentityConnection"); ;
         }
         public static void EnsureDbCreation()
         {
@@ -43,10 +44,10 @@ namespace BudgettingInfrastructure
                 {
                     db.Database.EnsureCreated();
                 }
-                using (var db = new IdentityContext())
-                {
-                    db.Database.EnsureCreated();
-                }
+                //using (var db = new IdentityContext())
+                //{
+                //    db.Database.EnsureCreated();
+                //}
             }
             catch (Exception ex)
             {
@@ -61,11 +62,22 @@ namespace BudgettingInfrastructure
                 options.UseSqlite(BudgettingContext.ConnectionString,
                     b => b.MigrationsAssembly(typeof(BudgettingContext).Assembly.FullName));
             });
-            services.AddDbContext<IdentityContext>(options =>
+            services.AddOperationalDbContext(options =>
             {
-                options.UseSqlite(IdentityContext.ConnectionString,
-                    b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
+                options.ConfigureDbContext = db => db.UseSqlite(BudgettingContext.ConnectionString,
+                    b => b.MigrationsAssembly(typeof(BudgettingContext).Assembly.FullName));
             });
+
+            services.AddConfigurationDbContext(options =>
+            {
+                options.ConfigureDbContext = db => db.UseSqlite(BudgettingContext.ConnectionString,
+                    b => b.MigrationsAssembly(typeof(BudgettingContext).Assembly.FullName));
+            });
+            //services.AddDbContext<IdentityContext>(options =>
+            //{
+            //    options.UseSqlite(IdentityContext.ConnectionString,
+            //        b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
+            //});
 
         }
         public static void ConfigureServices(IServiceCollection services)
@@ -191,7 +203,7 @@ namespace BudgettingInfrastructure
         private static void AddScopedServices(IServiceCollection services)
         {
             services.AddScoped<IBudgettingContext>(provider => provider.GetService<BudgettingContext>());
-            services.AddScoped<IIdentityContext>(provider => provider.GetService<IdentityContext>());
+            //services.AddScoped<IIdentityContext>(provider => provider.GetService<IdentityContext>());
 
         }
 

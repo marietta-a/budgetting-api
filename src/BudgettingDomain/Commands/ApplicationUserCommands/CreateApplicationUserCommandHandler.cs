@@ -27,6 +27,8 @@ namespace BudgettingDomain.Commands.ApplicationUserCommands
                 {
                     UserName = request.UserName,
                     Email = request.Email,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName
 
                 };
 
