@@ -34,8 +34,7 @@ if (app.Environment.IsDevelopment())
 ServiceConfigurationContainer.Configure(app);
 
 
-app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action}");
-//app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
+app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
 
 app.MapControllers();
 

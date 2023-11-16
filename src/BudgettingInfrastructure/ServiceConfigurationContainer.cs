@@ -103,7 +103,21 @@ namespace BudgettingInfrastructure
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("scope", "api1");
                 });
+
             });
+            //services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+                        //.AllowCredentials());
+            });
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/dist";
+            //});
 
             AddMediatRServices(services);
             AddTransientServices(services);
@@ -186,11 +200,25 @@ namespace BudgettingInfrastructure
 
             //app.MapControllers();
 
+            app.UseCors("CorsPolicy");
+            app.UseHttpsRedirection();
+            //app.UseSpaStaticFiles();
+            //app.UseSpa(spa =>
+            //{
+            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            //    // see https://go.microsoft.com/fwlink/?linkid=864501
 
+            //    spa.Options.SourcePath = "ClientApp";
+
+            //    //if (app.Environment.IsDevelopment())
+            //    //{
+            //    //    spa.UseAngularCliServer(npmScript: "start");
+            //    //}
+            //});
             app.UseRouting();
 
             //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             //app.UseEndpoints(endpoints =>
             //{

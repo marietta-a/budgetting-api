@@ -59,5 +59,10 @@ namespace Implementations
                 throw;
             }
         }
+
+        public Task<T> DeleteItem(T item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

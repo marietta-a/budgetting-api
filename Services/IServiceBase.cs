@@ -13,6 +13,7 @@ namespace Services
     public interface IServiceBase<T> : IServiceBase where T : class
     {
         Task<T> GetItem(T item);
+        Task<T> DeleteItem(T item);
         Task<T> AddOrUpdateItem(T item);
         Task<IQueryable<T>> GetItems();
     }

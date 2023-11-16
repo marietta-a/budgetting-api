@@ -19,7 +19,7 @@ namespace BudgettingCore.Controllers
         }
 
         [HttpPost(Name = "CreateUser")]
-        public async Task<IActionResult> CreateUser(CreateApplicationUserCommand command)
+        public async Task<IActionResult> CreateUser([FromBody] CreateApplicationUserCommand command)
         {
             try
             {
