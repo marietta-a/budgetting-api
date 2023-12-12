@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace Budgetting.Domain.Models
         public string CategoryId { get; set; }
         public int Stock { get; set; }
         public decimal Price { get; set; }
+        [NotMapped]
+        public string[] EntityKeys => new[] { Id };
 
     }
 }

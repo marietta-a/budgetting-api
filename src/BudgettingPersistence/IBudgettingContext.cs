@@ -17,6 +17,16 @@ namespace BudgettingPersistence
         DbSet<FinancialOperation> FinancialOperations { get; set; }
         DbSet<FinancialOperationType> FinancialOperationTypes { get; set; }
         DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        DbSet<Cart> Carts { get; set; }
+        DbSet<Category> Categories { get; set; }
+        DbSet<Customer> Customers { get; set; }
+        DbSet<Order> Orders { get; set; }
+        DbSet<OrderItem> OrderItems { get; set; }
+        DbSet<Payment> Payments { get; set; }
+        DbSet<Product> Products { get; set; }
+        DbSet<Shipment> Shipments { get; set; }
+        DbSet<WishList> WishLists { get; set; }
+
         Task<int> SaveChangesAsync();
     }
 }
