@@ -16,6 +16,14 @@ namespace Budgetting.Repository
         {
         }
 
+        public override Task<Product> AddOrUpdateItem(Product item)
+        {
+            if(string.IsNullOrEmpty(item?.Id))
+            {
+                item.Id = Guid.NewGuid().ToString();
+            }
+            return base.AddOrUpdateItem(item);
+        }
         public override async Task<Product> GetItem(Product item)
         {
             return await Context.Products.FindAsync(item.EntityKeys);

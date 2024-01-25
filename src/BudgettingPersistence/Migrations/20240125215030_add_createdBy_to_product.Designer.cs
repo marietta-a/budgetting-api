@@ -3,6 +3,7 @@ using System;
 using BudgettingPersistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Budgetting.Persistence.Migrations
 {
     [DbContext(typeof(BudgettingContext))]
-    partial class BudgettingContextModelSnapshot : ModelSnapshot
+    [Migration("20240125215030_add_createdBy_to_product")]
+    partial class add_createdBy_to_product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -298,10 +301,12 @@ namespace Budgetting.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ColorCode")
+                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
@@ -309,10 +314,12 @@ namespace Budgetting.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DeliveryTimeSpan")
+                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
@@ -330,10 +337,12 @@ namespace Budgetting.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SKU")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ShortName")
+                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 

@@ -1,4 +1,6 @@
 ﻿using Budgetting.Domain.Queries.ApplicationUserQueries;
+using Budgetting.Repository;
+using Budgetting.Services;
 using BudgettingDomain.Commands.ApplicationUserCommands;
 using BudgettingPersistence;
 using IdentityServer4;
@@ -238,6 +240,7 @@ namespace BudgettingInfrastructure
         private static void AddTransientServices(IServiceCollection services)
         {
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
+            services.AddTransient<IProductService, ProductService>();
         }
     }
 }
