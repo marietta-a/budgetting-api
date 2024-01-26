@@ -241,6 +241,7 @@ namespace BudgettingInfrastructure
         {
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICategoryService, CategoryService>();
         }
     }
 }

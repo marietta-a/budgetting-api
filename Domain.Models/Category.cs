@@ -15,6 +15,8 @@ namespace Budgetting.Domain.Models
         public string Id { get; set; }
         [StringLength(100)]
         public string Name { get; set; }
+        [StringLength(10)]
+        public string? ParentCategoryId { get; set; }
         [NotMapped]
         public string[] EntityKeys => new[] { Id };
     }

@@ -35,6 +35,8 @@ namespace Budgetting.Domain.Models
         public string? DeliveryTimeSpan { get; set; }
         [StringLength(500)]
         public string ImageUrl { get; set; }
+        [StringLength(10)]
+        public string? StatusCode { get; set; }
         [NotMapped]
         public string[] EntityKeys => new[] { Id };
 
