@@ -41,6 +41,8 @@ namespace Budgetting.Domain.Models
         public string? PromotionCode { get; set; }
         [StringLength(250)]
         public string? Brand { get; set; }
+        [StringLength(5)]
+        public string? Size { get; set; }
         [NotMapped]
         public string[] EntityKeys => new[] { Id };
 
