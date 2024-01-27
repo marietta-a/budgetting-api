@@ -37,6 +37,10 @@ namespace Budgetting.Domain.Models
         public string ImageUrl { get; set; }
         [StringLength(10)]
         public string? StatusCode { get; set; }
+        [StringLength(10)]
+        public string? PromotionCode { get; set; }
+        [StringLength(250)]
+        public string? Brand { get; set; }
         [NotMapped]
         public string[] EntityKeys => new[] { Id };
 
