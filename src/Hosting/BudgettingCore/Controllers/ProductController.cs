@@ -48,6 +48,22 @@ namespace BudgettingCore.Controllers
             }
         }
 
+        [HttpGet(Name = "GetProductStatuses")]
+        public async Task<IActionResult> GetProductStatuses()
+        {
+            try
+            {
+                var query = new GetAllProductStatusesQuery();
+                var Products = mediator.Send(query);
+
+                return Ok(Products);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
         
     }
 }

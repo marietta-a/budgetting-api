@@ -50,6 +50,22 @@ namespace BudgettingCore.Controllers
             }
         }
 
+        [HttpGet(Name = "GetAllParentCategories")]
+        public async Task<IActionResult> GetAllParentCategories()
+        {
+            try
+            {
+                var query = new GetAllParentCategoriesQuery();
+                var Products = mediator.Send(query);
+
+                return Ok(Products);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
         
     }
 }

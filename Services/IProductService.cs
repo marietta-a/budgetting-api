@@ -10,5 +10,6 @@ namespace Budgetting.Services
 {
     public interface IProductService : IServiceBase<Product>
     {
+        Task<List<LookupTableData>> GetProductStatuses();
     }
 }

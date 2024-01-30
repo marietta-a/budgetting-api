@@ -1,4 +1,6 @@
 ﻿using Budgetting.Domain.Models;
+using Budgetting.Domain.Models.Common;
+using Budgetting.Domain.Models.Core;
 using Budgetting.Services;
 using BudgettingPersistence;
 using Implementations;
@@ -27,6 +29,11 @@ namespace Budgetting.Repository
         public override async Task<Product> GetItem(Product item)
         {
             return await Context.Products.FindAsync(item.EntityKeys);
+        }
+
+        public async Task<List<LookupTableData>> GetProductStatuses()
+        {
+            return LookupItems.ProductStatuses.Where(b => b.LanguageCode == Languages.English.ToT2D())?.ToList();
         }
     }
 }
