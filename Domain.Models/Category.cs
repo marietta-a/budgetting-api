@@ -19,5 +19,7 @@ namespace Budgetting.Domain.Models
         public string? ParentCategoryId { get; set; }
         [NotMapped]
         public string[] EntityKeys => new[] { Id };
+        [NotMapped]
+        public LookupTableData ParentCategory { get; set; }
     }
 }

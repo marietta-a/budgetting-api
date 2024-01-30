@@ -66,6 +66,22 @@ namespace BudgettingCore.Controllers
             }
         }
 
+        [HttpGet(Name = "GetDetailedCategories")]
+        public async Task<IActionResult> GetDetailedCategories()
+        {
+            try
+            {
+                var query = new GetDetailedCategoriesQuery();
+                var Products = mediator.Send(query);
+
+                return Ok(Products);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
         
     }
 }

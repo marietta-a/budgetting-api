@@ -5,11 +5,14 @@ using Budgetting.Services;
 using BudgettingPersistence;
 using FluentValidation.Resources;
 using Implementations;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Budgetting.Repository
 {
@@ -27,6 +30,7 @@ namespace Budgetting.Repository
             }
             return base.AddOrUpdateItem(item);
         }
+
         public override async Task<Category> GetItem(Category item)
         {
             return await Context.Categories.FindAsync(item.EntityKeys);
@@ -36,5 +40,32 @@ namespace Budgetting.Repository
         {
             return LookupItems.ParentCategoryTypes.Where(b => b.LanguageCode == Languages.English.ToT2D()).ToList();
         }
+
+
+        public async Task<List<ParentCategories>> GetDetailedCategories()
+        {
+            try
+            {
+                var categories = await (await this.GetItems()).ToListAsync();
+                var pCategories = await this.GetParentCategories();
+
+                var query = pCategories.GroupJoin(categories, p => p.DataCode, c => c.ParentCategoryId, (p, c) => new
+                {
+                    Parent = p,
+                    Categories = c.ToArray()
+                }).Where(b => b.Categories != null).Select(b => new ParentCategories
+                {
+                    Parent = b?.Parent,
+                    Categories = b?.Categories,
+                })?.ToList();
+
+                return query;
+
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+         }
     }
 }

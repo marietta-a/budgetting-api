@@ -11,5 +11,6 @@ namespace Budgetting.Services
     public interface ICategoryService: IServiceBase<Category>
     {
         Task<List<LookupTableData>> GetParentCategories();
+        Task<List<ParentCategories>> GetDetailedCategories();
     }
 }
