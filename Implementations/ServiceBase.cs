@@ -29,6 +29,7 @@ namespace Implementations
                     var existing = await GetItem(item);
                     if (existing != null)
                     {
+                        Context.Entry(existing).State = EntityState.Detached;
                         Context.Set<T>().Update(item);
                     }
                     else
@@ -60,9 +61,25 @@ namespace Implementations
             }
         }
 
-        public Task<T> DeleteItem(T item)
+        public async Task<T> DeleteItem(T item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using(var trans = Context.Database.BeginTransaction()) {
+                    var existing = await GetItem(item);
+                    if (existing != null)
+                    {
+                        Context.Set<T>().Remove(existing);
+                        await Context.SaveChangesAsync();
+                        await trans.CommitAsync();
+                    }
+                    return existing;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

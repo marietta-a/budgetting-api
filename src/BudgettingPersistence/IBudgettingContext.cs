@@ -1,5 +1,6 @@
 ﻿using Budgetting.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
@@ -13,6 +14,7 @@ namespace BudgettingPersistence
     public interface IBudgettingContext : IDisposable
     {
         DbSet<T> Set<T>() where T : class;
+        EntityEntry<T> Entry<T>(T existing) where T : class;
         DatabaseFacade Database { get; }
         DbSet<FinancialOperation> FinancialOperations { get; set; }
         DbSet<FinancialOperationType> FinancialOperationTypes { get; set; }

@@ -34,6 +34,34 @@ namespace BudgettingCore.Controllers
             }
         }
 
+        [HttpPost(Name = "DeleteCategory")]
+        public async Task<IActionResult> DeleteCategory([FromBody] DeleteCategoryCommand command)
+        {
+            try
+            {
+                var record = mediator.Send(command);
+                return Ok(record);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost(Name = "UpdateCategory")]
+        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand command)
+        {
+            try
+            {
+                var record = mediator.Send(command);
+                return Ok(record);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         [HttpGet(Name = "GetAllCategories")]
         public async Task<IActionResult> GetAllCategories()
         {
