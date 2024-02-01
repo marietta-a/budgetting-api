@@ -22,14 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Services">
-      <HintPath>..\..\Services\obj\Debug\net7.0\Services.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Services\Budgetting.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain.Models\Budgetting.Domain.Models.csproj" />
-    <ProjectReference Include="..\..\Services\Budgetting.Services.csproj" />
+    <Reference Include="Services">
+      <HintPath>..\..\Services\obj\Debug\net7.0\Services.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

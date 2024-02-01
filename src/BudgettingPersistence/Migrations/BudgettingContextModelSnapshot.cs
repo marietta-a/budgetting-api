@@ -109,6 +109,11 @@ namespace Budgetting.Persistence.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -351,6 +356,11 @@ namespace Budgetting.Persistence.Migrations
 
                     b.Property<string>("Size")
                         .HasMaxLength(5)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(75)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StatusCode")

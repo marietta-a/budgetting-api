@@ -6,11 +6,39 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Budgetting.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class addshoppingartifacts : Migration
+    public partial class initialcreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ApplicationUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UserName = table.Column<string>(type: "TEXT", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "TEXT", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUsers", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Carts",
                 columns: table => new
@@ -28,7 +56,9 @@ namespace Budgetting.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Slug = table.Column<string>(type: "TEXT", maxLength: 75, nullable: false),
+                    ParentCategoryId = table.Column<string>(type: "TEXT", maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,6 +80,35 @@ namespace Budgetting.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FinancialOperations",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    OperationTypeId = table.Column<string>(type: "TEXT", maxLength: 4, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialOperations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FinancialOperationTypes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Type = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
+                    Operation = table.Column<int>(type: "INTEGER", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialOperationTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,11 +163,22 @@ namespace Budgetting.Persistence.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    SKU = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    Slug = table.Column<string>(type: "TEXT", maxLength: 75, nullable: false),
+                    ColorCode = table.Column<string>(type: "TEXT", maxLength: 25, nullable: true),
+                    ShortName = table.Column<string>(type: "TEXT", maxLength: 25, nullable: true),
+                    SKU = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
                     CategoryId = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Stock = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<decimal>(type: "TEXT", nullable: false)
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", maxLength: 25, nullable: true),
+                    DeliveryTimeSpan = table.Column<string>(type: "TEXT", maxLength: 25, nullable: true),
+                    ImageUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    StatusCode = table.Column<string>(type: "TEXT", maxLength: 10, nullable: true),
+                    PromotionCode = table.Column<string>(type: "TEXT", maxLength: 10, nullable: true),
+                    Brand = table.Column<string>(type: "TEXT", maxLength: 250, nullable: true),
+                    Size = table.Column<string>(type: "TEXT", maxLength: 5, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -151,6 +221,9 @@ namespace Budgetting.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApplicationUsers");
+
+            migrationBuilder.DropTable(
                 name: "Carts");
 
             migrationBuilder.DropTable(
@@ -158,6 +231,12 @@ namespace Budgetting.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "FinancialOperations");
+
+            migrationBuilder.DropTable(
+                name: "FinancialOperationTypes");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");

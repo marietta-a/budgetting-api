@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BudgettingPersistence\Budgetting.Persistence.csproj" />
     <ProjectReference Include="..\Domain.Models\Budgetting.Domain.Models.csproj" />
     <ProjectReference Include="..\Services\Budgetting.Services.csproj" />
-    <ProjectReference Include="..\src\BudgettingPersistence\Budgetting.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

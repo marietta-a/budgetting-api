@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Budgetting.Repository
@@ -24,6 +25,7 @@ namespace Budgetting.Repository
             {
                 item.Id = Guid.NewGuid().ToString();
             }
+            item.Slug = Regex.Replace(item?.Name, @"\s", "-");
             return base.AddOrUpdateItem(item);
         }
         public override async Task<Product> GetItem(Product item)

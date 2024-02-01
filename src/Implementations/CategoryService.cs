@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -28,6 +29,7 @@ namespace Budgetting.Repository
             {
                 item.Id = Guid.NewGuid().ToString();
             }
+            item.Slug = Regex.Replace(item?.Name, @"\s", "-");
             return base.AddOrUpdateItem(item);
         }
 

@@ -18,9 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Implementations\Budgetting.Repository.csproj" />
-    <ProjectReference Include="..\..\Services\Budgetting.Services.csproj" />
     <ProjectReference Include="..\BudgettingPersistence\Budgetting.Persistence.csproj" />
+    <ProjectReference Include="..\Implementations\Budgetting.Implementations.csproj" />
   </ItemGroup>
 
 </Project>

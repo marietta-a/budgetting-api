@@ -16,6 +16,8 @@ namespace Budgetting.Domain.Models
         public string Id { get; set; }
         [StringLength(50)]
         public string Name { get; set; }
+        [StringLength(75)]
+        public string Slug { get; set; }
         [StringLength(25)]
         public string? ColorCode { get; set; }
         [StringLength(25)]

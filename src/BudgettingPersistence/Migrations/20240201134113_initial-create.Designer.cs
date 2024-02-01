@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Budgetting.Persistence.Migrations
 {
     [DbContext(typeof(BudgettingContext))]
-    [Migration("20240125211910_update_product")]
-    partial class update_product
+    [Migration("20240201134113_initial-create")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,6 +106,15 @@ namespace Budgetting.Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ParentCategoryId")
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(75)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -295,13 +304,20 @@ namespace Budgetting.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Brand")
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CategoryId")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ColorCode")
-                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
@@ -309,12 +325,10 @@ namespace Budgetting.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DeliveryTimeSpan")
-                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
@@ -331,14 +345,29 @@ namespace Budgetting.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PromotionCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SKU")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ShortName")
-                        .IsRequired()
                         .HasMaxLength(25)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Size")
+                        .HasMaxLength(5)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StatusCode")
+                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Stock")
