@@ -23,22 +23,16 @@ namespace Budgetting.Persistence
                 identityDbContext.Database.Migrate();
             }
 
-            var role = new IdentityRole
+            AuthorizationConstants.IDENTITY_ROLES.ForEach(async role =>
             {
-                Id = "01",
-                Name = IdentityRoles.Administrator.ToString()
-            };
+                await roleManager.CreateAsync(role);
+            });
 
 
-            await roleManager.CreateAsync(role);
-
-            var defaultUser = new ApplicationUser { UserName = "admin", Email = "akumbommarietta@gmail.com" };
-            await userManager.CreateAsync(defaultUser, AuthorizationConstants.DEFAULT_PASSWORD);
-
-            string adminUserName = "admin@microsoft.com";
-            var adminUser = new ApplicationUser { UserName = adminUserName, Email = adminUserName };
+            var adminUser = new ApplicationUser { UserName = "admin", Email = "akumbommarietta@gmail.com" };
             await userManager.CreateAsync(adminUser, AuthorizationConstants.DEFAULT_PASSWORD);
-            adminUser = await userManager.FindByNameAsync(adminUserName);
+
+            adminUser = await userManager.FindByNameAsync(adminUser?.UserName);
 
             if(adminUser != null)
             {

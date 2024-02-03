@@ -47,5 +47,10 @@ namespace BudgettingPersistence
                 optionsBuilder.UseSqlite(connection);
             }
         }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await base.SaveChangesAsync();
+        }
     }
 }

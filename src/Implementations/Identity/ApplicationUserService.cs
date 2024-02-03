@@ -1,4 +1,5 @@
 ﻿using Budgetting.Domain.Models;
+using Budgetting.Implementations;
 using BudgettingPersistence;
 using Services;
 using System;
@@ -7,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Implementations
+namespace Budgetting.Implementations.Identity
 {
-    public class ApplicationUserService : ServiceBase<ApplicationUser>, IApplicationUserService
+    public class ApplicationUserService : IdentityServiceBase<ApplicationUser>, IApplicationUserService
     {
-        public ApplicationUserService(IBudgettingContext _ctx) : base(_ctx)
+        public ApplicationUserService(IIdentityContext _ctx) : base(_ctx)
         {
         }
 

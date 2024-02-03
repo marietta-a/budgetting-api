@@ -1,5 +1,6 @@
 ﻿using Budgetting.Domain.Models;
 using Budgetting.Domain.Queries.ApplicationUserQueries;
+using Budgetting.Implementations.Identity;
 using Budgetting.Persistence;
 using Budgetting.Repository;
 using Budgetting.Services;
@@ -8,7 +9,6 @@ using BudgettingPersistence;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.Storage;
 using IdentityServer4.Stores;
-using Implementations;
 using MediatR;
 using MediatR.Wrappers;
 using Microsoft.AspNetCore.Builder;
