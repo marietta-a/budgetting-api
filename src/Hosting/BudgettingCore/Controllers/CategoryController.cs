@@ -4,6 +4,7 @@ using Budgetting.Domain.Queries.ProductQueries;
 using BudgettingDomain.Commands.CategoryCommands;
 using BudgettingDomain.Commands.ProductCommands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgettingCore.Controllers

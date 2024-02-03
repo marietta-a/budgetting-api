@@ -1,4 +1,5 @@
 ﻿using Budgetting.Domain.Models;
+using Budgetting.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;

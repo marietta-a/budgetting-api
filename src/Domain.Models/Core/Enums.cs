@@ -43,4 +43,10 @@ namespace Budgetting.Domain.Models.Core
         Cosmetics = 1,
         Accessories
     }
+
+    public enum IdentityRoles
+    {
+        Administrator = 1,
+        User
+    }
 }

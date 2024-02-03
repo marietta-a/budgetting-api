@@ -1,5 +1,8 @@
 
+using Budgetting.Domain.Models;
 using BudgettingInfrastructure;
+using BudgettingPersistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -11,16 +14,26 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthorization();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+})
+        .AddEntityFrameworkStores<IdentityContext>()
+        .AddDefaultTokenProviders();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
 ServiceConfigurationContainer.EnsureDbCreation();
+
 ServiceConfigurationContainer.SetConnectionString(builder.Configuration);
 ServiceConfigurationContainer.RegisterConnections(builder.Services, builder.Configuration);
 ServiceConfigurationContainer.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
+ServiceConfigurationContainer.MigrateDatabase(app);
+app.MapSwagger().RequireAuthorization();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

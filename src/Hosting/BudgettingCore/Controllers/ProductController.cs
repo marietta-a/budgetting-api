@@ -2,11 +2,13 @@
 using Budgetting.Domain.Queries.ProductQueries;
 using BudgettingDomain.Commands.ProductCommands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgettingCore.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly ILogger<Product> logger;
@@ -61,7 +63,7 @@ namespace BudgettingCore.Controllers
         }
 
         [HttpGet(Name = "GetAllProducts")]
-        public async Task<IActionResult> GetALlProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
             try
             {

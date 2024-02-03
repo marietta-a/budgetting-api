@@ -24,11 +24,11 @@ namespace BudgettingPersistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<ApplicationUser>().ToTable("User");
-            builder.Entity<IdentityRole>().ToTable("Role");
-            builder.Entity<IdentityUserRole<string>>().ToTable("UserRole");
-            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
-            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
+            builder.Entity<ApplicationUser>().ToTable("User").HasKey(b => b.Id);
+            builder.Entity<IdentityRole>().ToTable("Role").HasKey(b => b.Id);
+            builder.Entity<IdentityUserRole<string>>().ToTable("UserRole").HasKey(b => new { b.RoleId, b.UserId });
+            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim").HasKey(b => b.Id);
+            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin").HasKey(b => b.UserId);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
