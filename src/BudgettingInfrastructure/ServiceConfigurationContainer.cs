@@ -4,6 +4,7 @@ using Budgetting.Implementations.Identity;
 using Budgetting.Persistence;
 using Budgetting.Repository;
 using Budgetting.Services;
+using BudgettingCore.Core;
 using BudgettingDomain.Commands.ApplicationUserCommands;
 using BudgettingPersistence;
 using IdentityServer4;
@@ -102,6 +103,7 @@ namespace BudgettingInfrastructure
 
 
             services.AddControllers();
+            services.AddMvc();
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
@@ -140,9 +142,42 @@ namespace BudgettingInfrastructure
             AddTransientServices(services);
             AddScopedServices(services);
 
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //        .AddEntityFrameworkStores<IdentityContext>()
-            //        .AddDefaultTokenProviders();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+
+            }).AddEntityFrameworkStores<IdentityContext>()
+              .AddDefaultTokenProviders();
+
+
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                //options.LoginPath = "/Account/Login"; // Change this to your login page
+                //options.AccessDeniedPath = "/Account/AccessDenied"; // Change this to your access denied page
+                options.SlidingExpiration = true;
+            });
 
             //IdentityResourceConfiguration.ConfigureIdentityServer(services);
 
@@ -248,7 +283,7 @@ namespace BudgettingInfrastructure
         private static void AddScopedServices(IServiceCollection services)
         {
             services.AddScoped<IBudgettingContext>(provider => provider.GetService<BudgettingContext>());
-            //services.AddScoped<IIdentityContext>(provider => provider.GetService<IdentityContext>());
+            services.AddScoped<IIdentityContext>(provider => provider.GetService<IdentityContext>());
 
         }
 
@@ -261,16 +296,16 @@ namespace BudgettingInfrastructure
 
         public static async void MigrateDatabase(WebApplication app)
         {
-            var services = app.Services;
-            var identityContext = services.GetRequiredService<IdentityContext>();
-            var budgettingContext = services.GetRequiredService<IBudgettingContext>();
-            identityContext.Database.Migrate();
-            budgettingContext.Database.Migrate();
+            var scope = app.Services.CreateScope();
+            {
+                var identityContext = (IIdentityContext)scope.ServiceProvider.GetService(typeof(IIdentityContext));
 
-            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                AuthorizationConstants.USER_MANAGER = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                AuthorizationConstants.ROLER_MANAGER = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                AuthorizationConstants.SIGN_IN_MANAGER = scope.ServiceProvider.GetService<SignInManager<ApplicationUser>>();
 
-            await IdentityContextSeed.SeedAsync(identityContext, userManager, roleManager);
+                await IdentityContextSeed.SeedAsync(identityContext, AuthorizationConstants.USER_MANAGER, AuthorizationConstants.ROLER_MANAGER);
+            }
         }
     }
 }

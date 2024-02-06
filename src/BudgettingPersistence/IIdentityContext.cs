@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BudgettingPersistence
 {
-    public interface IIdentityContext
+    public interface IIdentityContext : IDisposable
     {
         DbSet<ApplicationUser> ApplicationUsers { get; set; }
         DbSet<T> Set<T>() where T : class;

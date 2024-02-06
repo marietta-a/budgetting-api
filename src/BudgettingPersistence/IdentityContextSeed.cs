@@ -15,7 +15,7 @@ namespace Budgetting.Persistence
 {
     public class IdentityContextSeed
     {
-        public static async Task SeedAsync(IdentityContext identityDbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedAsync(IIdentityContext identityDbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
 
             if (identityDbContext.Database.IsSqlite())
@@ -25,16 +25,25 @@ namespace Budgetting.Persistence
 
             AuthorizationConstants.IDENTITY_ROLES.ForEach(async role =>
             {
-                await roleManager.CreateAsync(role);
+                if (!roleManager.Roles.Contains(role))
+                {
+                    await roleManager.CreateAsync(role);
+                }
             });
 
 
-            var adminUser = new ApplicationUser { UserName = "admin", Email = "akumbommarietta@gmail.com" };
+            var adminUser = new ApplicationUser 
+            {
+                FirstName = "akumbom",
+                LastName = "marietta",
+                UserName = "admin",
+                Email = "akumbommarietta@gmail.com"
+            };
             await userManager.CreateAsync(adminUser, AuthorizationConstants.DEFAULT_PASSWORD);
 
             adminUser = await userManager.FindByNameAsync(adminUser?.UserName);
 
-            if(adminUser != null)
+            if(adminUser != null && !userManager.GetRolesAsync(adminUser).Result.Any())
             {
                 await userManager.AddToRoleAsync(adminUser, IdentityRoles.Administrator.ToString());
             }

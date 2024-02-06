@@ -1,4 +1,5 @@
-﻿using Budgetting.Domain.Models.Core;
+﻿using Budgetting.Domain.Models;
+using Budgetting.Domain.Models.Core;
 using Microsoft.AspNetCore.Identity;
 
 namespace BudgettingCore.Core
@@ -21,5 +22,10 @@ namespace BudgettingCore.Core
                 Name = IdentityRoles.User.ToString()
             }
         };
+       
+
+        public static UserManager<ApplicationUser> USER_MANAGER { get; set; }
+        public static RoleManager<IdentityRole> ROLER_MANAGER { get; set; }
+        public static SignInManager<ApplicationUser> SIGN_IN_MANAGER { get; set; }
     }
 }
