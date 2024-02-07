@@ -23,9 +23,5 @@ namespace BudgettingCore.Core
             }
         };
        
-
-        public static UserManager<ApplicationUser> USER_MANAGER { get; set; }
-        public static RoleManager<IdentityRole> ROLER_MANAGER { get; set; }
-        public static SignInManager<ApplicationUser> SIGN_IN_MANAGER { get; set; }
     }
 }

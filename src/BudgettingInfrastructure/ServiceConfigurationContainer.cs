@@ -35,6 +35,7 @@ namespace BudgettingInfrastructure
 {
     public class ServiceConfigurationContainer
     {
+        private static string originName => "AllowAngularOrigins";
         public static void SetConnectionString(IConfiguration configuration)
         {
             BudgettingContext.ConnectionString = configuration.GetConnectionString("BudgettingConn"); ;
@@ -49,10 +50,10 @@ namespace BudgettingInfrastructure
                 {
                     db.Database.EnsureCreated();
                 }
-                using (var db = new IdentityContext())
-                {
-                    db.Database.EnsureCreated();
-                }
+                //using (var db = new IdentityContext())
+                //{
+                //    db.Database.EnsureCreated();
+                //}
             }
             catch (Exception ex)
             {
@@ -102,42 +103,59 @@ namespace BudgettingInfrastructure
         {
 
 
-            services.AddControllers();
-            services.AddMvc();
+            //services.AddAuthentication("Bearer")
+            //    .AddJwtBearer("Bearer", options =>
+            //    {
+            //        options.Authority = "https://localhost:5001";
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = "https://localhost:5001";
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateAudience = false
+            //        };
+            //    });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("ApiScope", policy =>
+            //    {
+            //        policy.RequireAuthenticatedUser();
+            //        policy.RequireClaim("scope", "api1");
+            //    });
 
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
-                });
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiScope", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "api1");
-                });
+            //});
 
-            });
-            //services.AddCors();
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-                        //.AllowCredentials());
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("CorsPolicy",
+            //        builder => builder.AllowAnyOrigin()
+            //            .AllowAnyMethod()
+            //            .AllowAnyHeader());
+            //            //.AllowCredentials());
+            //});
             //services.AddSpaStaticFiles(configuration =>
             //{
             //    configuration.RootPath = "ClientApp/dist";
             //});
 
+            services.AddAuthentication();
+            services.AddAuthorization();
+
+            services.AddCors( options =>
+            {
+                options.AddPolicy(name: originName,
+                builder =>
+                {
+                    builder.WithOrigins(
+                                        "http://localhost:4200"
+                                        )
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+
+            });
+           
+
+            services.AddControllers();
+            services.AddMvc();
             AddMediatRServices(services);
             AddTransientServices(services);
             AddScopedServices(services);
@@ -174,7 +192,7 @@ namespace BudgettingInfrastructure
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                //options.LoginPath = "/Account/Login"; // Change this to your login page
+                options.LoginPath = "/Account/Login"; // Change this to your login page
                 //options.AccessDeniedPath = "/Account/AccessDenied"; // Change this to your access denied page
                 options.SlidingExpiration = true;
             });
@@ -252,7 +270,7 @@ namespace BudgettingInfrastructure
 
             //app.MapControllers();
 
-            app.UseCors("CorsPolicy");
+            app.UseCors(originName);
             app.UseHttpsRedirection();
             //app.UseSpaStaticFiles();
             //app.UseSpa(spa =>
@@ -269,7 +287,7 @@ namespace BudgettingInfrastructure
             //});
             app.UseRouting();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             //app.UseEndpoints(endpoints =>
@@ -300,11 +318,10 @@ namespace BudgettingInfrastructure
             {
                 var identityContext = (IIdentityContext)scope.ServiceProvider.GetService(typeof(IIdentityContext));
 
-                AuthorizationConstants.USER_MANAGER = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                AuthorizationConstants.ROLER_MANAGER = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-                AuthorizationConstants.SIGN_IN_MANAGER = scope.ServiceProvider.GetService<SignInManager<ApplicationUser>>();
+                var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 
-                await IdentityContextSeed.SeedAsync(identityContext, AuthorizationConstants.USER_MANAGER, AuthorizationConstants.ROLER_MANAGER);
+                await IdentityContextSeed.SeedAsync(identityContext, userManager, roleManager);
             }
         }
     }

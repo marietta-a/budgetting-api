@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BudgettingCore.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [Authorize]
+    [AllowAnonymous]
     public class ProductController : ControllerBase
     {
         private readonly ILogger<Product> logger;

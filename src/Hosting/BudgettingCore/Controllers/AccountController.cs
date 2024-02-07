@@ -1,6 +1,8 @@
 ﻿using Budgetting.Domain.Models;
+using Budgetting.Domain.Models.Core;
 using Budgetting.Domain.Queries.ApplicationUserQueries;
 using BudgettingCore.Core;
+using BudgettingCore.Models;
 using BudgettingCore.Models.UserManagement;
 using BudgettingDomain.Commands.ApplicationUserCommands;
 using MediatR;
@@ -11,59 +13,84 @@ using Microsoft.AspNetCore.Mvc;
 namespace BudgettingCore.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class AccountController : ControllerBase
+    [Authorize]
+    public class AccountController : ApiControllerBase
     {
         private readonly ILogger<ApplicationUser> logger;
         private readonly IMediator mediator;
-        //private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public AccountController(ILogger<ApplicationUser> logger,
-                                 IMediator mediator
-                                 //UserManager<ApplicationUser> userManager,
-                                 //SignInManager<IdentityUser> signInManager
+                                 IMediator mediator,
+                                 UserManager<ApplicationUser> userManager,
+                                 SignInManager<ApplicationUser> signInManager
             )
         {
             this.mediator = mediator;
             this.logger = logger;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
+
         }
 
+        // TODO: implementation of role management
         [HttpPost(Name = "Register")]
-        public async Task<IActionResult> Register(UserModel user)
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] UserModel user)
         {
+            var msg = "invalid model state";
             // Create a new user object
-
-            // Create the user with the specified password
-            var result = await AuthorizationConstants.USER_MANAGER.CreateAsync(user, user?.Password);
-
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                // User created successfully
-                return Ok("User created successfully");
-            }
-            else
-            {
-                // Failed to create user, return errors
-                foreach (var error in result.Errors)
+                // Create the user with the specified password
+                user.EmailConfirmed = true;
+                var result = await userManager.CreateAsync(user, user?.Password);
+
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+
+                    var createdUser = await userManager.FindByNameAsync(user?.UserName);
+                    if (createdUser != null)
+                    {
+                        await userManager.AddToRoleAsync(createdUser, IdentityRoles.User.ToString());
+                    }
+                    // User created successfully
+                    msg = "User created successfully";
+                    return Ok(GetServerResult(msg, result.Succeeded));
                 }
-                return BadRequest(ModelState);
+                else
+                {
+                    // Failed to create user, return errors
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    msg = "Failed to create user";
+                    return Ok(GetServerResult(msg, result.Succeeded, result.Errors));
+                }
             }
+            // If we got this far, something failed, redisplay form
+            return Ok(GetServerResult(msg, false));
+
         }
 
 
         [HttpPost(Name = "Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
+        public async Task<IActionResult> Login([FromBody]  LoginModel model)
         {
+            var msg = "invalid model stated";
             if (ModelState.IsValid)
             {
-                var result = await AuthorizationConstants.SIGN_IN_MANAGER.PasswordSignInAsync(model?.UserName, model?.Password, model.RememberMe, lockoutOnFailure: true);
+                var result = await signInManager.PasswordSignInAsync(model?.UserName, model?.Password, model.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    logger.LogInformation("User logged in.");
-                    return Ok(model);
+                    msg = "User logged in.";
+                    logger.LogInformation(msg);
+
+
+                    return Ok(GetServerResult(msg, result.Succeeded));
                     //return RedirectToLocal(returnUrl);
                 }
                 //if (result.RequiresTwoFactor)
@@ -72,36 +99,40 @@ namespace BudgettingCore.Controllers
                 //}
                 if (result.IsLockedOut)
                 {
-                    logger.LogWarning("User account locked out.");
-                    return BadRequest("User account locked out.");
+                    msg = "User account locked out.";
+                    logger.LogWarning(msg);
+                    return Ok(GetServerResult(msg, result.Succeeded));
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return BadRequest("Invalid login attempt.");
+                    msg = "Invalid login attempt.";
+                    ModelState.AddModelError(string.Empty, msg);
+                    return Ok(GetServerResult(msg, result.Succeeded, result));
                 }
             }
             // If we got this far, something failed, redisplay form
-            return Ok(model);
+            return Ok(GetServerResult(msg, false));
         }
 
         [HttpPost(Name = "Logout")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await AuthorizationConstants.SIGN_IN_MANAGER.SignOutAsync();
-            logger.LogInformation("User logged out.");
-            return Ok();
+            try
+            {
+
+                await this.signInManager.SignOutAsync();
+                var msg = "User logged out.";
+                logger.LogInformation(msg);
+                return Ok(GetServerResult(msg, true));
+            }
+            catch(Exception ex)
+            {
+                var msg = "User logged out failed.";
+                logger.LogWarning(msg);
+                return BadRequest(GetServerResult(msg, false, ex));
+            }
         }
-
-        //[AllowAnonymous]
-        //public ActionResult Login()
-        //{
-        //}
-
-        //public ActionResult Logout()
-        //{
-        //}
 
         [HttpGet(Name = "GetUsers")]
             public async Task<IActionResult> GetAllUsers()
@@ -119,6 +150,6 @@ namespace BudgettingCore.Controllers
                 }
             }
 
-        
-        }
+
+    }
 }

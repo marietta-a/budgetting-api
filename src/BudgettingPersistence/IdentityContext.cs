@@ -29,6 +29,7 @@ namespace BudgettingPersistence
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRole").HasKey(b => new { b.RoleId, b.UserId });
             builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim").HasKey(b => b.Id);
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin").HasKey(b => b.UserId);
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim").HasKey(b => b.Id);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -39,7 +40,7 @@ namespace BudgettingPersistence
             {
                 var connectionStringBuilder = new SqliteConnectionStringBuilder(ConnectionString)
                 {
-                    DataSource = $"{path}\\Identity.db"
+                    //DataSource = $"{path}\\Identity.db"
                 };
                 var connectionString = connectionStringBuilder.ToString();
                 var connection = new SqliteConnection(connectionString);

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BudgettingCore.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [AllowAnonymous]
     public class CategoryController : ControllerBase
     {
         private readonly ILogger<Product> logger;
