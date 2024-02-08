@@ -5,6 +5,7 @@ using BudgettingPersistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,8 @@ if (app.Environment.IsDevelopment())
 ServiceConfigurationContainer.Configure(app);
 
 
+app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
+     .RequireAuthorization();
 app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
 
 app.MapControllers();

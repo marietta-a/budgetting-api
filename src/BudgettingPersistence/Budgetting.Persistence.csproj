@@ -19,9 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain.Models\Budgetting.Domain.Models.csproj" />
     <ProjectReference Include="..\BudgettingDomain\Budgetting.Domain.csproj" />
-    <ProjectReference Include="..\Domain.Models\Budgetting.Domain.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
