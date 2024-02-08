@@ -23,42 +23,67 @@ namespace BudgettingCore.Controllers
         [HttpPost(Name = "CreateProduct")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var record = mediator.Send(command);
-                return Ok(record);
+                try
+                {
+                    logger.LogInformation("successfully created product");
+                    var record = mediator.Send(command);
+                    return Ok(record);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
-            catch(Exception ex)
+            else
             {
-                throw;
+                return BadRequest("Failed to create product due to invalid model state");
             }
         }
 
         [HttpPost(Name = "DeleteProduct")]
         public async Task<IActionResult> DeleteProduct([FromBody] DeleteProductCommand command)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var record = mediator.Send(command);
-                return Ok(record);
+
+                try
+                {
+                    logger.LogInformation("Successfully deleted product");
+                    var record = mediator.Send(command);
+                    return Ok(record);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                throw;
+                return BadRequest("Failed to delete product due to invalid model state");
             }
         }
 
         [HttpPost(Name = "UpdateProduct")]
         public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductCommand command)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var record = mediator.Send(command);
-                return Ok(record);
+                try
+                {
+                    logger.LogInformation("Successfully updated product");
+                    var record = mediator.Send(command);
+                    return Ok(record);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                throw;
+                return BadRequest("Failed to update product due to invalid model state");
             }
         }
 
