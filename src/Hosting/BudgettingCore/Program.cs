@@ -21,7 +21,7 @@ ServiceConfigurationContainer.EnsureDbCreation();
 
 ServiceConfigurationContainer.SetConnectionString(builder.Configuration);
 ServiceConfigurationContainer.RegisterConnections(builder.Services, builder.Configuration);
-ServiceConfigurationContainer.ConfigureServices(builder.Services);
+ServiceConfigurationContainer.ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
@@ -36,6 +36,7 @@ if (app.Environment.IsDevelopment())
 
 
 }
+
 
 ServiceConfigurationContainer.Configure(app);
 

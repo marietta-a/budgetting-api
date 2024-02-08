@@ -25,42 +25,55 @@ namespace BudgettingCore.Controllers
         [HttpPost(Name = "CreateCategory")]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
         {
-            try
+            if (ModelState.IsValid)
             {
                 var record = mediator.Send(command);
                 return Ok(record);
             }
-            catch(Exception ex)
+            else
             {
-                throw;
+                return BadRequest("Invalid model state");
             }
         }
 
         [HttpPost(Name = "DeleteCategory")]
         public async Task<IActionResult> DeleteCategory([FromBody] DeleteCategoryCommand command)
         {
-            try
+
+            if (ModelState.IsValid)
             {
+                logger.LogInformation("successfully deleted category");
                 var record = mediator.Send(command);
                 return Ok(record);
             }
-            catch (Exception ex)
+            else
             {
-                throw;
+                logger.LogWarning("failed to delete category due to invalid model state");
+                return BadRequest("Invalid model state");
             }
         }
 
         [HttpPost(Name = "UpdateCategory")]
         public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand command)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var record = mediator.Send(command);
-                return Ok(record);
+                try
+                {
+                    logger.LogInformation("successfully updated category");
+                    var record = mediator.Send(command);
+                    return Ok(record);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogInformation("failed to update category");
+                    throw;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                throw;
+                logger.LogInformation("Failed to update category due to invalid model state");
+                return BadRequest("Failed to update category due to invalid model state");
             }
         }
 

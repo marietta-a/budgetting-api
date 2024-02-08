@@ -12,6 +12,7 @@ using IdentityServer4.EntityFramework.Storage;
 using IdentityServer4.Stores;
 using MediatR;
 using MediatR.Wrappers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -99,7 +100,7 @@ namespace BudgettingInfrastructure
 
 
         }
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
         {
 
 
@@ -136,7 +137,23 @@ namespace BudgettingInfrastructure
             //    configuration.RootPath = "ClientApp/dist";
             //});
 
-            services.AddAuthentication();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Audience = AuthorizationConstants.WEB_APP_ENDPOINT;
+                options.Authority = AuthorizationConstants.API_ENDPOINT;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    //ValidIssuer = configuration["Jwt:Issuer"],
+                    //ValidAudience = configuration["Jwt:Issuer"],
+                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                };
+            });
             services.AddAuthorization();
 
             services.AddCors( options =>
@@ -269,8 +286,14 @@ namespace BudgettingInfrastructure
             //app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
 
             //app.MapControllers();
+            app.UseRouting();
 
-            app.UseCors(originName);
+            app.UseAuthentication();
+            app.UseAuthorization();
+ 
+
+
+             app.UseCors(originName);
             app.UseHttpsRedirection();
             //app.UseSpaStaticFiles();
             //app.UseSpa(spa =>
@@ -285,10 +308,6 @@ namespace BudgettingInfrastructure
             //    //    spa.UseAngularCliServer(npmScript: "start");
             //    //}
             //});
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             //app.UseEndpoints(endpoints =>
             //{
