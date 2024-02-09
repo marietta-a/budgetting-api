@@ -18,8 +18,7 @@ namespace Budgetting.Domain.Models
         [NotMapped]
         public string[] EntityKeys => new[] { Id };
         [NotMapped]
-        public string UserRoles { get; set; }
-
+        public string? UserRoles { get; set; }
 
         public List<Claim> GetUserClaims()
         {
@@ -31,7 +30,7 @@ namespace Budgetting.Domain.Models
                 new Claim("LastName", LastName),
                 new Claim("Email", Email ?? string.Empty),
                 new Claim("UserName", UserName ?? string.Empty),
-                new Claim("Role", UserRoles)
+                new Claim("Role", UserRoles),
             };
         }
     }

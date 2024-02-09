@@ -28,11 +28,12 @@ namespace Budgetting.Api.Helpers.Middlewares
         {
             //string secretString = "greatNews";
             //return secretString + user.Email + purpose + user.Id;
-            var claims = JsonConvert.SerializeObject( user.GetUserClaims().Select(b => new
+            var claimList = user.GetUserClaims().Select(b => new
             {
                 Name = b.Type,
                 b.Value
-            }));
+            });
+            var claims = JsonConvert.SerializeObject(claimList);
 
             return claims ?? string.Empty;
         }

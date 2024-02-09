@@ -95,9 +95,9 @@ namespace BudgettingCore.Controllers
                     msg = "User logged in.";
                     logger.LogInformation(msg);
 
-                    var token = JsonConvert.DeserializeObject( await loginClient.GenerateUserToken(model.UserName));
+                    var token = await loginClient.GenerateUserToken(model.UserName);
 
-                    return Ok(GetServerResult(token, result.Succeeded));
+                    return Ok(token);
                     //return RedirectToLocal(returnUrl);
                 }
                 //if (result.RequiresTwoFactor)
