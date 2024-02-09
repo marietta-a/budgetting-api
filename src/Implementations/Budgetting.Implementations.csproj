@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BudgettingPersistence\Budgetting.Persistence.csproj" />
-    <ProjectReference Include="..\Domain.Models\Budgetting.Domain.Models.csproj" />
     <ProjectReference Include="..\Services\Budgetting.Services.csproj" />
   </ItemGroup>
 

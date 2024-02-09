@@ -1,4 +1,6 @@
-﻿using Budgetting.Domain.Models;
+﻿using Budgetting.Api.Helpers.Implementations;
+using Budgetting.Api.Helpers.Interfaces;
+using Budgetting.Domain.Models;
 using Budgetting.Domain.Models.Core;
 using Budgetting.Domain.Queries.ApplicationUserQueries;
 using BudgettingCore.Core;
@@ -9,6 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BudgettingCore.Controllers
 {
@@ -20,17 +23,20 @@ namespace BudgettingCore.Controllers
         private readonly IMediator mediator;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILoginClient loginClient;
 
         public AccountController(ILogger<ApplicationUser> logger,
                                  IMediator mediator,
                                  UserManager<ApplicationUser> userManager,
-                                 SignInManager<ApplicationUser> signInManager
+                                 SignInManager<ApplicationUser> signInManager,
+                                 ILoginClient loginClient
             )
         {
             this.mediator = mediator;
             this.logger = logger;
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.loginClient = loginClient;
 
         }
 
@@ -89,8 +95,9 @@ namespace BudgettingCore.Controllers
                     msg = "User logged in.";
                     logger.LogInformation(msg);
 
+                    var token = JsonConvert.DeserializeObject( await loginClient.GenerateUserToken(model.UserName));
 
-                    return Ok(GetServerResult(msg, result.Succeeded));
+                    return Ok(GetServerResult(token, result.Succeeded));
                     //return RedirectToLocal(returnUrl);
                 }
                 //if (result.RequiresTwoFactor)

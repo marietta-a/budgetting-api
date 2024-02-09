@@ -1,4 +1,8 @@
-﻿using Budgetting.Domain.Models;
+﻿using Budgetting.Api.Helpers.Implementations;
+using Budgetting.Api.Helpers.Interfaces;
+using Budgetting.Api.Helpers.Middlewares;
+using Budgetting.Domain.Models;
+using Budgetting.Domain.Models.Core;
 using Budgetting.Domain.Queries.ApplicationUserQueries;
 using Budgetting.Implementations.Identity;
 using Budgetting.Persistence;
@@ -137,23 +141,24 @@ namespace BudgettingInfrastructure
             //    configuration.RootPath = "ClientApp/dist";
             //});
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.Audience = AuthorizationConstants.WEB_APP_ENDPOINT;
-                options.Authority = AuthorizationConstants.API_ENDPOINT;
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //.AddJwtBearer(options =>
+            //{
+            //    options.Audience = AuthorizationConstants.WEB_APP_ENDPOINT;
+            //    options.Authority = AuthorizationConstants.API_ENDPOINT;
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    //ValidIssuer = configuration["Jwt:Issuer"],
-                    //ValidAudience = configuration["Jwt:Issuer"],
-                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
-                };
-            });
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = true,
+            //        ValidateIssuerSigningKey = true,
+            //        //ValidIssuer = configuration["Jwt:Issuer"],
+            //        //ValidAudience = configuration["Jwt:Issuer"],
+            //        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+            //    };
+            //});
+            services.AddAuthentication();
             services.AddAuthorization();
 
             services.AddCors( options =>
@@ -200,7 +205,7 @@ namespace BudgettingInfrastructure
                 options.User.RequireUniqueEmail = false;
 
             }).AddEntityFrameworkStores<IdentityContext>()
-              .AddDefaultTokenProviders();
+              .AddTokenProvider("Default", typeof(ApplicationUserTwoFactorAuthentication<ApplicationUser>));
 
 
 
@@ -329,6 +334,8 @@ namespace BudgettingInfrastructure
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ILoginClient, LoginClient>();
+            services.AddTransient<IUserTwoFactorTokenProvider<ApplicationUser>, ApplicationUserTwoFactorAuthentication<ApplicationUser>>();
         }
 
         public static async void MigrateDatabase(WebApplication app)

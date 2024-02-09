@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Budgetting.Domain.Models;
-using Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Budgetting.Services;
+using Budgetting.Domain.Models;
 
 namespace Budgetting.Domain.Queries.ProductQueries
 {

@@ -3,7 +3,6 @@ using Budgetting.Domain.Models.Common;
 using Budgetting.Domain.Models.Core;
 using Budgetting.Services;
 using BudgettingPersistence;
-using FluentValidation.Resources;
 using Implementations;
 using Microsoft.EntityFrameworkCore;
 using System;
