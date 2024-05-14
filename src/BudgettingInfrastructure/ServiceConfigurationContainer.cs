@@ -167,7 +167,7 @@ namespace BudgettingInfrastructure
                 builder =>
                 {
                     builder.WithOrigins(
-                                        "http://localhost:4200"
+                                        new[] { "http://localhost:4200", "http://localhost:10760/" } 
                                         )
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();

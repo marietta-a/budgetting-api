@@ -19,20 +19,20 @@ namespace BudgettingDomain.Commands.ProductCommands
 
         public UpdateProductCommand(string id,
                                     string name,
-                                    string colorCode,
-                                    string shortName,
+                                    string? colorCode,
+                                    string? shortName,
                                     string sKU,
-                                    string description,
+                                    string? description,
                                     string categoryId,
                                     int stock,
                                     decimal price,
                                     DateTime createdDate,
-                                    string deliveryTimeSpan,
+                                    string? deliveryTimeSpan,
                                     string imageUrl,
-                                    string createdBy,
-                                    string statusCode,
-                                    string size,
-                                    string promotionCode)
+                                    string? createdBy,
+                                    string? statusCode,
+                                    string? size,
+                                    string? promotionCode)
         {
             Id = id;
             Name = name;
@@ -54,20 +54,20 @@ namespace BudgettingDomain.Commands.ProductCommands
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public string ColorCode { get; set; }
-        public string ShortName { get; set; }
+        public string? ColorCode { get; set; }
+        public string? ShortName { get; set; }
         public string SKU { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public string CategoryId { get; set; }
         public int Stock { get; set; }
         public decimal Price { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string DeliveryTimeSpan { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public string? DeliveryTimeSpan { get; set; }
         public string ImageUrl { get; set; }
-        public string CreatedBy { get; set; }
-        public string StatusCode { get; set; }
-        public string Size { get; set; }
-        public string PromotionCode { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? StatusCode { get; set; }
+        public string? Size { get; set; }
+        public string? PromotionCode { get; set; }
 
     }
 }
