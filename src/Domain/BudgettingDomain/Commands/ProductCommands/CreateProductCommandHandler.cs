@@ -1,7 +1,11 @@
-﻿using Budgetting.Domain.Models;
+﻿using Budgetting.Domain.Commands.ApplicationUserCommands;
+using Budgetting.Domain.Commands.ProductCommands;
+using Budgetting.Domain.Models;
 using Budgetting.Services;
 using ExpressMapper.Extensions;
+using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Options;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -39,6 +43,8 @@ namespace BudgettingDomain.Commands.ProductCommands
                     CreatedBy = request?.CreatedBy
                 };
 
+                var validator = new CreateProductCommandValidator();
+                await validator.ValidateAndThrowAsync(request);
                 var result = await service.AddOrUpdateItem(user);
 
                 return result;

@@ -161,6 +161,7 @@ namespace BudgettingInfrastructure
             services.AddAuthentication();
             services.AddAuthorization();
 
+
             services.AddCors( options =>
             {
                 options.AddPolicy(name: originName,
@@ -174,7 +175,7 @@ namespace BudgettingInfrastructure
                 });
 
             });
-           
+
 
             services.AddControllers();
             services.AddMvc();
@@ -331,11 +332,11 @@ namespace BudgettingInfrastructure
 
         private static void AddTransientServices(IServiceCollection services)
         {
-            services.AddTransient<IApplicationUserService, ApplicationUserService>();
-            services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<ILoginClient, LoginClient>();
-            services.AddTransient<IUserTwoFactorTokenProvider<ApplicationUser>, ApplicationUserTwoFactorAuthentication<ApplicationUser>>();
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ILoginClient, LoginClient>();
+            services.AddScoped<IUserTwoFactorTokenProvider<ApplicationUser>, ApplicationUserTwoFactorAuthentication<ApplicationUser>>();
         }
 
         public static async void MigrateDatabase(WebApplication app)

@@ -45,36 +45,38 @@ namespace BudgettingCore.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] UserModel user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var msg = "invalid model state";
             // Create a new user object
-            if (ModelState.IsValid)
+            
+            // Create the user with the specified password
+            user.EmailConfirmed = true;
+            var result = await userManager.CreateAsync(user, user?.Password);
+
+            if (result.Succeeded)
             {
-                // Create the user with the specified password
-                user.EmailConfirmed = true;
-                var result = await userManager.CreateAsync(user, user?.Password);
 
-                if (result.Succeeded)
+                var createdUser = await userManager.FindByNameAsync(user?.UserName);
+                if (createdUser != null)
                 {
-
-                    var createdUser = await userManager.FindByNameAsync(user?.UserName);
-                    if (createdUser != null)
-                    {
-                        await userManager.AddToRoleAsync(createdUser, IdentityRoles.User.ToString());
-                    }
-                    // User created successfully
-                    msg = "User created successfully";
-                    return Ok(GetServerResult(msg, result.Succeeded));
+                    await userManager.AddToRoleAsync(createdUser, IdentityRoles.User.ToString());
                 }
-                else
+                // User created successfully
+                msg = "User created successfully";
+                return Ok(GetServerResult(msg, result.Succeeded));
+            }
+            else
+            {
+                // Failed to create user, return errors
+                foreach (var error in result.Errors)
                 {
-                    // Failed to create user, return errors
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                    msg = "Failed to create user";
-                    return Ok(GetServerResult(msg, result.Succeeded, result.Errors));
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
+                msg = "Failed to create user";
+                return Ok(GetServerResult(msg, result.Succeeded, result.Errors));
             }
             // If we got this far, something failed, redisplay form
             return Ok(GetServerResult(msg, false));
@@ -86,36 +88,37 @@ namespace BudgettingCore.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody]  LoginModel model)
         {
-            var msg = "invalid model stated";
-            if (ModelState.IsValid)
+            var msg = "";
+            if (!ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model?.UserName, model?.Password, model.RememberMe, lockoutOnFailure: true);
-                if (result.Succeeded)
-                {
-                    msg = "User logged in.";
-                    logger.LogInformation(msg);
+                return BadRequest(ModelState);
+            }
+            var result = await signInManager.PasswordSignInAsync(model?.UserName, model?.Password, model.RememberMe, lockoutOnFailure: true);
+            if (result.Succeeded)
+            {
+                msg = "User logged in.";
+                logger.LogInformation(msg);
 
-                    var token = await loginClient.GenerateUserToken(model.UserName);
+                var token = await loginClient.GenerateUserToken(model.UserName);
 
-                    return Ok(token);
-                    //return RedirectToLocal(returnUrl);
-                }
-                //if (result.RequiresTwoFactor)
-                //{
-                //    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                //}
-                if (result.IsLockedOut)
-                {
-                    msg = "User account locked out.";
-                    logger.LogWarning(msg);
-                    return Ok(GetServerResult(msg, result.Succeeded));
-                }
-                else
-                {
-                    msg = "Invalid login attempt.";
-                    ModelState.AddModelError(string.Empty, msg);
-                    return Ok(GetServerResult(msg, result.Succeeded, result));
-                }
+                return Ok(token);
+                //return RedirectToLocal(returnUrl);
+            }
+            //if (result.RequiresTwoFactor)
+            //{
+            //    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+            //}
+            if (result.IsLockedOut)
+            {
+                msg = "User account locked out.";
+                logger.LogWarning(msg);
+                return Ok(GetServerResult(msg, result.Succeeded));
+            }
+            else
+            {
+                msg = "Invalid login attempt.";
+                ModelState.AddModelError(string.Empty, msg);
+                return Ok(GetServerResult(msg, result.Succeeded, result));
             }
             // If we got this far, something failed, redisplay form
             return Ok(GetServerResult(msg, false));
@@ -146,6 +149,11 @@ namespace BudgettingCore.Controllers
             {
                 try
                 {
+
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(ModelState);
+                    }
                     var query = new GetAllApplicationUsersQuery();
                     var users = mediator.Send(query);
 
