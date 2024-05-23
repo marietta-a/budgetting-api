@@ -42,8 +42,8 @@ if (app.Environment.IsDevelopment())
 ServiceConfigurationContainer.Configure(app);
 
 
-app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
-     .RequireAuthorization();
+//app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
+//     .RequireAuthorization();
 app.MapControllerRoute(name: "dafault", pattern: "{controller}/{action?}/{id?}");
 
 app.MapControllers();

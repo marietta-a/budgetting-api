@@ -4,9 +4,11 @@ using Budgetting.Domain.Models;
 using Budgetting.Domain.Models.Core;
 using Budgetting.Domain.Queries.ApplicationUserQueries;
 using BudgettingCore.Core;
+using BudgettingCore.Extensions;
 using BudgettingCore.Models;
 using BudgettingCore.Models.UserManagement;
 using BudgettingDomain.Commands.ApplicationUserCommands;
+using ExpressMapper.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,12 +26,15 @@ namespace BudgettingCore.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILoginClient loginClient;
+        private readonly ITokenService _tokenService;
 
         public AccountController(ILogger<ApplicationUser> logger,
                                  IMediator mediator,
                                  UserManager<ApplicationUser> userManager,
                                  SignInManager<ApplicationUser> signInManager,
-                                 ILoginClient loginClient
+                                 ILoginClient loginClient,
+                                 ITokenService tokenService
+
             )
         {
             this.mediator = mediator;
@@ -37,7 +42,24 @@ namespace BudgettingCore.Controllers
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.loginClient = loginClient;
+            this._tokenService = tokenService;
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var claim = await userManager.FindByEmailFromClaimsPrincipal(HttpContext.User);
+            if(claim == null)
+            {
+                return NotFound();
+            }
+            var user = new LoginModel
+            {
+                UserName = claim.UserName,
+                Token = _tokenService.CreateToken(claim)
+            };
+            return Ok(user);
         }
 
         // TODO: implementation of role management
@@ -66,7 +88,9 @@ namespace BudgettingCore.Controllers
                 }
                 // User created successfully
                 msg = "User created successfully";
-                return Ok(GetServerResult(msg, result.Succeeded));
+                var u = createdUser?.Map<ApplicationUser, LoginModel>();
+                u.Token = _tokenService.CreateToken(createdUser);
+                return Ok(u);
             }
             else
             {
@@ -78,8 +102,6 @@ namespace BudgettingCore.Controllers
                 msg = "Failed to create user";
                 return Ok(GetServerResult(msg, result.Succeeded, result.Errors));
             }
-            // If we got this far, something failed, redisplay form
-            return Ok(GetServerResult(msg, false));
 
         }
 
@@ -89,6 +111,7 @@ namespace BudgettingCore.Controllers
         public async Task<IActionResult> Login([FromBody]  LoginModel model)
         {
             var msg = "";
+            var user = await userManager.FindByNameAsync(model?.UserName);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -98,10 +121,10 @@ namespace BudgettingCore.Controllers
             {
                 msg = "User logged in.";
                 logger.LogInformation(msg);
+                var token = _tokenService.CreateToken(user);
+                model.Token = token;
 
-                var token = await loginClient.GenerateUserToken(model.UserName);
-
-                return Ok(token);
+                return Ok(model);
                 //return RedirectToLocal(returnUrl);
             }
             //if (result.RequiresTwoFactor)

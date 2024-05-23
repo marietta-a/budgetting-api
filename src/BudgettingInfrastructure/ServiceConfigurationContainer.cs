@@ -182,6 +182,7 @@ namespace BudgettingInfrastructure
             AddMediatRServices(services);
             AddTransientServices(services);
             AddScopedServices(services);
+            AddSingletonServices(services);
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -323,10 +324,15 @@ namespace BudgettingInfrastructure
 
         }
 
-        private static void AddScopedServices(IServiceCollection services)
+        private static void AddSingletonServices(IServiceCollection services)
         {
+            services.AddSingleton<ITokenService, TokenService>();
             services.AddScoped<IBudgettingContext>(provider => provider.GetService<BudgettingContext>());
             services.AddScoped<IIdentityContext>(provider => provider.GetService<IdentityContext>());
+        }
+
+        private static void AddScopedServices(IServiceCollection services)
+        {
 
         }
 
